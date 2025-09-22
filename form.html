@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ส่งแบบฟอร์มประเมิน</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Noto+Serif+Thai:wght@400;600;700&family=Taviraj:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg1:#5b1a1a; --bg2:#2a0c0c;
+    --paper:#f6ecd6; --paper2:#f3e3c2;
+    --gold:#deb35a; --gold-deep:#a67924;
+    --ink:#3e280e;
+    --accent:#7b3b00; --accent-2:#945000;
+    --green:#16653e;
+  }
+
+  *{ box-sizing:border-box }
+  html,body{height:100%}
+  body{
+    margin:0; min-height:100vh; overflow-x:hidden;
+    font-family:"Taviraj","Noto Serif Thai","Charm",serif;
+    color:var(--ink);
+    background: radial-gradient(circle at 50% -20%, var(--bg1), var(--bg2) 80%);
+    display:flex; justify-content:center; align-items:stretch;
+    padding: clamp(14px, 4vw, 56px);
+  }
+
+  /* กระดาษหลัก – จำกัดความกว้างสูงสุดกันหลุด */
+  .page{
+    position:relative;
+    width:100%; max-width: 1200px;
+    background:
+      radial-gradient(140% 100% at 50% -20%, var(--paper2), transparent 60%),
+      var(--paper);
+    border-radius:24px;
+    border:10px solid rgba(255,255,255,.35);
+    box-shadow:0 24px 72px rgba(0,0,0,.30), inset 0 0 0 5px var(--gold);
+    padding: clamp(18px, 3.5vw, 48px);
+    margin:auto;
+    overflow:hidden;
+  }
+  .page::after{
+    content:""; position:absolute; inset:22px;
+    border:4px solid var(--gold-deep); border-radius:16px; pointer-events:none;
+  }
+
+  /* ลายมุมด้วย CSS (ไม่ใช้รูป) */
+  .orn{
+    --s: clamp(18px, 2.6vw, 30px);
+    position:absolute; width:var(--s); height:var(--s); left:28px; top:28px;
+  }
+  .orn::before,.orn::after{
+    content:""; position:absolute; inset:0;
+    border:3px solid var(--gold); border-radius:6px;
+  }
+  .orn::after{ transform:rotate(45deg) }
+  .orn.rt{ left:auto; right:28px }
+  .orn.lb{ top:auto; bottom:28px }
+  .orn.rb{ left:auto; right:28px; top:auto; bottom:28px }
+
+  /* ป้ายหัวเรื่องทรงไทย */
+  .plaque-wrap{ display:flex; justify-content:center; margin:clamp(8px,1.4vw,16px) 0 clamp(20px,3.2vw,36px) }
+  .plaque{
+    position:relative;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    color:#ffe8c9; font-weight:800; letter-spacing:.3px;
+    height: clamp(64px, 13vw, 140px);
+    padding-inline: clamp(18px, 5vw, 60px);
+    border-radius:999px; border:4px solid #5e2b00;
+    box-shadow: 0 10px 0 #5e2b00, 0 22px 34px rgba(0,0,0,.18), inset 0 0 0 4px #c27b29;
+  }
+  .plaque::before,.plaque::after{
+    content:""; position:absolute; top:50%; transform:translateY(-50%);
+    width: clamp(24px, 3.8vw, 52px); height: clamp(24px, 3.8vw, 52px);
+    border-radius:999px; background:inherit; border:4px solid #5e2b00;
+    box-shadow: inset 0 0 0 4px #c27b29;
+  }
+  .plaque::before{ left: clamp(-12px, -2vw, -20px) }
+  .plaque::after { right:clamp(-12px, -2vw, -20px) }
+  .plaque h1{
+    margin:0; text-shadow:0 2px 0 #5e2b00, 0 6px 14px rgba(0,0,0,.28);
+    font-size:clamp(20px, 4.6vw, 48px);
+  }
+
+  /* คำเกริ่น */
+  .intro{
+    text-align:center; color:#6b4a17;
+    font-size:clamp(14px,1.9vw,20px);
+    margin: 0 auto clamp(18px, 3.4vw, 30px);
+    max-width: 92%;
+    line-height:1.95;
+  }
+
+  /* กล่องประกาศเขียวทรงไทย */
+  .thai-panel{
+    position:relative;
+    margin:0 auto clamp(20px, 4vw, 34px);
+    max-width: 92%;
+    background: var(--green); color:#fffce9;
+    padding: clamp(14px, 3vw, 26px) clamp(16px, 3.2vw, 28px);
+    border:5px solid var(--gold);
+    border-radius: 20px;
+    box-shadow: inset 0 3px 14px rgba(0,0,0,.22);
+    font-size:clamp(14px,2vw,19px); line-height:1.95;
+  }
+  .thai-panel::before,.thai-panel::after{
+    content:""; position:absolute; width:44px; height:44px;
+    background:var(--paper); border:5px solid var(--gold); border-radius:50%;
+    top:-24px; left:22px; box-shadow:0 0 0 4px var(--green) inset;
+  }
+  .thai-panel::after{ left:auto; right:22px }
+
+  /* พื้นที่ปุ่ม */
+  .cta{
+    display:grid; gap: clamp(10px, 2.4vw, 18px);
+    grid-template-columns: 1fr;              /* มือถือ 1 คอลัมน์ */
+    max-width: 92%; margin: 0 auto;
+  }
+  @media (min-width:768px){
+    .cta{ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } /* จอใหญ่จัดหลายคอลัมน์อัตโนมัติ */
+  }
+
+  .btn{
+    appearance:none; border:0; cursor:pointer; font-family:inherit; font-weight:800;
+    padding: clamp(14px, 2.6vw, 20px) clamp(16px, 3vw, 24px);
+    border-radius:14px; width:100%; text-decoration:none;
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    font-size:clamp(15px, 1.8vw, 18px);
+  }
+  .btn svg{ width: clamp(18px,1.8vw,22px); height: clamp(18px,1.8vw,22px) }
+
+  .btn-primary{
+    color:#ffe9c9; background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    border:2px solid #5e2b00;
+    box-shadow: 0 12px 28px rgba(0,0,0,.26), inset 0 -4px 0 rgba(0,0,0,.15);
+    position:relative;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.04) }
+  .btn-primary::before,.btn-primary::after{
+    content:"✤"; font-family:"Charm",serif; position:absolute; top:50%;
+    transform:translateY(-50%); opacity:.6; color:#ffe8c9; font-size:clamp(16px,1.8vw,20px)
+  }
+  .btn-primary::before{ left:10px } .btn-primary::after{ right:10px }
+
+  .btn-ghost{
+    background:#fff3d7; color:#5a3a12; border:2px solid var(--gold);
+    box-shadow:0 8px 20px rgba(0,0,0,.14);
+  }
+  .btn-ghost:hover{ transform:translateY(-1px); filter:brightness(1.03) }
+
+  .note{
+    text-align:center; color:#7a5a23; font-size:clamp(13px,1.6vw,16px);
+    margin-top: clamp(12px, 2.6vw, 20px);
+  }
+
+  /* — Mobile เล็กมาก (≤360px) — */
+  @media (max-width:360px){
+    body{ padding:10px }
+    .page{ border-width:8px; border-radius:18px; padding:14px; box-shadow:0 18px 40px rgba(0,0,0,.28), inset 0 0 0 4px var(--gold) }
+    .page::after{ inset:12px; border-width:3px; border-radius:12px }
+    .orn{ --s:20px; left:16px; top:16px } .orn.rt{ right:16px } .orn.lb{ bottom:16px } .orn.rb{ right:16px; bottom:16px }
+    .plaque{ height:68px; padding-inline:16px; border-width:3px }
+    .plaque::before,.plaque::after{ width:20px; height:20px; border-width:3px }
+    .plaque h1{ font-size:18px }
+    .intro{ font-size:13.5px; margin-bottom:12px }
+    .thai-panel{ padding:12px; border-width:4px; font-size:13.8px }
+    .thai-panel::before,.thai-panel::after{ width:26px; height:26px; top:-14px; left:14px; border-width:4px }
+    .thai-panel::after{ right:14px; left:auto }
+    .btn{ padding:12px 14px; border-radius:12px; font-size:14.8px; gap:10px }
+    .btn svg{ width:16px; height:16px }
+  }
+
+  /* — จอใหญ่มาก (≥1800px) เพิ่มอีกนิดโดยยังไม่แตกเลย์เอาต์ — */
+  @media (min-width:1800px){
+    .plaque h1{ font-size:52px }
+    .intro, .thai-panel{ font-size:21px }
+    .btn{ font-size:20px }
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+    <!-- ลายมุม -->
+    <i class="orn"></i><i class="orn rt"></i><i class="orn lb"></i><i class="orn rb"></i>
+
+    <!-- ป้ายหัวเรื่อง -->
+    <div class="plaque-wrap">
+      <div class="plaque"><h1>เซียมซีวรรณคดีไทย</h1></div>
+    </div>
+
+    
+
+    <!-- กล่องประกาศ -->
+    <section class="thai-panel">
+      ผู้จัดทำโครงงานขอขอบพระคุณทุกท่านที่สละเวลาเข้ามาเยี่ยมชมเว็บไซต์ของเรา ความสนใจและการเข้ามาเยี่ยมชมของท่านคือกำลังใจสำคัญที่ทำให้เราภูมิใจในสิ่งที่ได้ลงแรงพัฒนา หวังเป็นอย่างยิ่งว่าผลงานชิ้นนี้จะสามารถสร้างประโยชน์ และเป็นอีกหนึ่งแหล่งข้อมูลเล็ก ๆ ที่ช่วยเติมเต็มความรู้ให้แก่ทุกท่านได้
+”เพื่อให้โครงงานของเราสมบูรณ์ยิ่งขึ้น หากท่านสะดวกเราขอเชิญชวนร่วมแสดงความคิดเห็นผ่านแบบประเมิน ความเห็นของท่านมีค่าสำหรับการพัฒนาครั้งต่อไป”
+    </section>
+
+    <!-- ปุ่ม -->
+    <div class="cta">
+      <a class="btn btn-primary"
+         href="https://docs.google.com/forms/d/e/1FAIpQLSfGu0vOplbXiUz79gyWpAb3nXXVwrniTFqslM3LxhpZNQMh9Q/viewform"
+         target="_blank" rel="noopener noreferrer">
+        เปิดแบบฟอร์ม Google Form
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M13 5l7 7-7 7M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a class="btn btn-ghost" href="result.html">← กลับหน้าผลทำนาย</a>
+    </div>
+  </main>
+</body>
+</html>

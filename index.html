@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>เซียมซีวรรณคดีไทย — หน้าต้อนรับ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#5b1a1a] via-[#2a0c0c] to-[#2a0c0c] font-sarabun">
+
+  <div class="relative w-[90vw] max-w-3xl">
+    <!-- รูปหลัก -->
+    <img src="images/web_01.png" alt="ภาพหน้าต้อนรับ" class="w-full rounded-2xl border-3 border-white/40 shadow-[0_12px_30px_rgba(0,0,0,0.4)] drop-shadow-lg" />
+
+    <!-- กระบอกเซียมซี -->
+    <img src="images/web_03.png" alt="กระบอกเซียมซี"
+         class="absolute left-1/2 bottom-[27%] -translate-x-1/2 w-[32%] drop-shadow-lg animate-[float_6s_ease-in-out_infinite]" />
+
+    <button id="startBtn"
+    class="absolute left-1/2 bottom-[20%] -translate-x-1/2
+           bg-gradient-to-b from-[#ffe073] to-[#f6b51a]
+           text-[#5c0000] font-extrabold
+           rounded-2xl
+           text-[clamp(14px,4vw,22px)]     /* ฟอนต์ใหญ่ขึ้น */
+           px-[clamp(18px,4vw,36px)]       /* ขยาย padding แนวนอน */
+           py-[clamp(10px,2.5vw,18px)]     /* ขยาย padding แนวตั้ง */
+           shadow-inner shadow-[#915f00]/50
+           shadow-[inset_0_-3px_0_#fff3b4]
+           hover:brightness-110
+           active:translate-y-[2px] active:brightness-90
+           transition-all duration-200 z-10">
+  เริ่มเขย่า
+</button>
+
+
+
+
+    <!-- ตัวละคร -->
+    <img src="images/icon01.png" alt="ตัวละครประกอบ"
+         class="absolute left-1/2 bottom-[-2%] -translate-x-1/2 w-2/5 opacity-70 pointer-events-none drop-shadow-lg" />
+  </div>
+
+  <script>
+    document.getElementById('startBtn').addEventListener('click', () => {
+      window.location.href = "shake.html";
+    });
+  </script>
+
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translate(-50%,0) rotate(-1.2deg); }
+      50% { transform: translate(-50%,-8px) rotate(1.2deg); }
+    }
+    .animate-\[float_6s_ease-in-out_infinite\] { animation: float 6s ease-in-out infinite; }
+
+    /* ลด motion สำหรับผู้ต้องการ */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-\[float_6s_ease-in-out_infinite\] { animation: none; }
+    }
+  </style>
+</body>
+</html>

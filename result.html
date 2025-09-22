@@ -16,7 +16,6 @@
     --pill-bg:#fff1cc; --pill-ink:#7b3b00;
     --box-min-h: 220px; --box-max-h: 58vh;
   }
-  /* ล็อกพื้นหลังตามที่ต้องการ */
   body{
     font-family:"Taviraj","Noto Serif Thai","Charm",serif;
     margin:0; min-height:100vh;
@@ -26,12 +25,32 @@
   body.theme-ram{ --paper:#f4e6cc; --paper-tint:#f0dab2; --card:#f6e6cacc; --border:#d5a449; --pill-bg:#ffe6b8; }
   body.theme-kckp{ --paper:#efe1cc; --paper-tint:#e8d4b7; --card:#f3e4cdcc; --border:#cfa059; --pill-bg:#ffe0b5; }
 
+  /* แผ่นกระดาษหลัก + กรอบรอบทั้งหน้า */
   #sheet{
     background:
       radial-gradient(140% 100% at 50% -20%, var(--paper-tint), transparent 60%),
       var(--paper);
     border-color:rgba(255,255,255,.35);
+    position:relative;
+    /* กรอบทองคู่ */
+    border: 6px double #d4a94a;
+    box-shadow:
+      0 0 22px rgba(0,0,0,.35),
+      inset 0 0 14px rgba(212,169,74,.35);
   }
+
+  /* ลายกรอบมุมไทย 4 มุม */
+  .corner-decor{
+    position:absolute; width:62px; height:62px; opacity:.96;
+    filter: drop-shadow(0 1px 0 rgba(255,255,255,.6))
+            drop-shadow(0 2px 6px rgba(0,0,0,.18));
+    pointer-events:none;
+  }
+  .corner-decor.tl{ top:-6px; left:-6px; }
+  .corner-decor.tr{ top:-6px; right:-6px; transform:scaleX(-1); }
+  .corner-decor.bl{ bottom:-6px; left:-6px; transform:scaleY(-1); }
+  .corner-decor.br{ bottom:-6px; right:-6px; transform:scale(-1); }
+
   .pill{
     background:var(--pill-bg); border:1.5px solid var(--border); color:var(--pill-ink);
     border-radius:999px; padding:.28rem .66rem; font-weight:800; font-size:.9rem;
@@ -76,15 +95,90 @@
   *::-webkit-scrollbar{ width:10px; height:10px } 
   *::-webkit-scrollbar-thumb{ background:rgba(123,59,0,.55); border-radius:999px }
   *::-webkit-scrollbar-track{ background:rgba(255,241,204,.35) }
+
+  /* ===== Thai plaque (หัวข้อบนป้ายสี #ffedc6) ===== */
+  .thai-plaque{
+    position:relative;
+    margin:.25rem auto 0;
+    padding:14px;
+    width:min(920px,96%);
+    border-radius:18px;
+    background:linear-gradient(180deg,#ffedc6,#ffe4b8 62%,#ffedc6 100%);
+    border:2.5px solid #d4a94a;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,.8),
+      inset 0 -6px 18px rgba(0,0,0,.08),
+      0 6px 20px rgba(0,0,0,.22);
+  }
+  .thai-plaque::before{
+    content:""; position:absolute; inset:6px;
+    border-radius:14px; border:2px solid #e8c46b; pointer-events:none;
+  }
+  .plaque-inner{ display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center; justify-content:center; }
+  #title{ margin:0; font-weight:800; letter-spacing:.5px; color:#5b2a06; text-shadow:0 1px 0 rgba(255,255,255,.6); }
+  .pill{ background:#fff5da; border:1.6px solid #d4a94a; color:#7b3b00; }
+  .orn{ position:absolute; width:34px; height:34px; opacity:.95; filter: drop-shadow(0 1px 0 rgba(255,255,255,.6)) drop-shadow(0 2px 6px rgba(0,0,0,.18)); pointer-events:none; }
+  .orn.top-left{ left:-6px; top:-6px; }
+  .orn.top-right{ right:-6px; top:-6px; transform:rotate(90deg); }
+  .orn.bot-right{ right:-6px; bottom:-6px; transform:rotate(180deg); }
+  .orn.bot-left{ left:-6px; bottom:-6px; transform:rotate(270deg); }
+  .thai-plaque #title{ font-size: clamp(22px, 4.6vw, 44px); }
+
+  /* ===== ลายดอกบัว/เมฆไทย กันโล่งด้านล่าง ===== */
+  .bottom-ornament{
+    margin-top:2.4rem;
+    display:flex; justify-content:center;
+    opacity:.95;
+  }
+  .bottom-ornament svg{
+    max-width:420px; width:90%;
+    filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+  }
 </style>
 </head>
 
 <body class="flex justify-center items-start theme-kckp">
-<main id="sheet" class="relative w-full max-w-[980px] flex flex-col justify-between min-h-screen border rounded-2xl shadow-2xl overflow-hidden p-4 sm:p-6 md:p-8">
+<main id="sheet" class="relative w-full max-w-[980px] flex flex-col justify-between min-h-screen rounded-2xl shadow-2xl overflow-hidden p-4 sm:p-6 md:p-8">
+  <!-- ลายมุมกรอบรอบหน้า -->
+  <svg class="corner-decor tl" viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <svg class="corner-decor tr" viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <svg class="corner-decor bl" viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <svg class="corner-decor br" viewBox="0 0 80 80" aria-hidden="true">
+    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
+  </svg>
 
-  <header class="text-center">
-    <div class="flex flex-col sm:flex-row justify-center items-center gap-2">
-      <h1 id="title" class="font-extrabold text-[clamp(22px,5vw,44px)] soft-cream">คำทำนาย — ใบที่ —</h1>
+  <!-- ป้ายหัวข้อทรงไทย -->
+  <header class="thai-plaque">
+    <!-- มุมเล็กบนป้าย -->
+    <svg class="orn top-left"  viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
+    </svg>
+    <svg class="orn top-right" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
+    </svg>
+    <svg class="orn bot-right" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
+    </svg>
+    <svg class="orn bot-left" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
+    </svg>
+
+    <div class="plaque-inner">
+      <h1 id="title">คำทำนาย — ใบที่ —</h1>
       <div class="flex items-center gap-2">
         <span id="drawBadge" class="pill">ใบที่ —</span>
         <span id="seriesBadge" class="pill">—</span>
@@ -107,8 +201,25 @@
 
   <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2 sm:gap-0">
     <div id="visitCounter" class="font-bold px-3 py-1 rounded-xl text-sm card">กำลังโหลดตัวนับ…</div>
-    <!-- ปุ่มใหม่ ไปหน้าถัดไป -->
     <button id="nextBtn" class="btn-primary px-4 py-2 md:px-6 md:py-3 text-[clamp(14px,2vw,18px)]">ไปหน้าถัดไป</button>
+  </div>
+
+  <!-- ลายดอกบัว/เมฆไทยกันโล่งด้านล่าง (SVG ฝัง) -->
+  <div class="bottom-ornament">
+    <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- เมฆไทย -->
+      <path d="M40 110c20-26 58-40 94-30 18-32 64-40 98-18 14-24 46-38 76-28 24-30 76-30 104 2 28-10 60 6 72 30 36-12 72 2 88 24"
+            fill="none" stroke="#e8c46b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M54 114c26-18 54-16 80-4M200 92c22-10 44-10 66 0M320 84c20-8 42-8 62 0M436 96c24-12 48-10 70 0"
+            fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- ดอกบัวกลาง -->
+      <g transform="translate(300,70) scale(1.1)">
+        <path d="M0-30 C8-10, 18-6, 0,20 C-18-6,-8-10,0-30z" fill="#ffedc6" stroke="#d4a94a" stroke-width="3"/>
+        <path d="M0-18 C10-6, 14-2, 0,12 C-14-2,-10-6,0-18z" fill="#ffe4b8" stroke="#e8c46b" stroke-width="2"/>
+        <ellipse cx="0" cy="22" rx="28" ry="8" fill="none" stroke="#d4a94a" stroke-width="3"/>
+      </g>
+    </svg>
   </div>
 </main>
 
@@ -122,7 +233,7 @@
 </div>
 
 <script>
-/* ====== ข้อมูล (ตัดมาเฉพาะโครงสั้น ๆ เพื่อสาธิต – วางชุดเต็มของคุณได้เลย) ====== */
+/* ====== ข้อมูลตัวอย่าง ====== */
 const DATA = {
   1:{series:"รามเกียรติ์",verse:`ครานั้นพระพรหมผู้เรืองศรี  ประทับเหนือบุษบกเมฆาไสว
 เห็นทารกพาลีวงศ์วานไกร      บุตรแห่งพระพายฤทธิ์เกรียงไกรปรากฏกาย
@@ -323,18 +434,34 @@ function render(){
 }
 
 /* Modal */
-function openVerseModal(){ const id=Number(sessionStorage.getItem('siemsiStick'))||13; const item=DATA[id]||Object.values(DATA)[0]; document.getElementById('fullVerse').textContent=item.verse; const m=document.getElementById('verseModal'); m.classList.remove('hidden'); m.classList.add('flex');}
-function closeVerseModal(){ const m=document.getElementById('verseModal'); m.classList.add('hidden'); m.classList.remove('flex');}
+function openVerseModal(){
+  const id=Number(sessionStorage.getItem('siemsiStick'))||13;
+  const item=DATA[id]||Object.values(DATA)[0];
+  document.getElementById('fullVerse').textContent=item.verse;
+  const m=document.getElementById('verseModal'); m.classList.remove('hidden'); m.classList.add('flex');
+}
+function closeVerseModal(){
+  const m=document.getElementById('verseModal'); m.classList.add('hidden'); m.classList.remove('flex');
+}
 
 /* ปุ่มไปหน้า form.html */
 document.getElementById('nextBtn').addEventListener('click', ()=>{ window.location.href='form.html'; });
 
 /* counter */
-(function(){ const k="siemsi_visit_count"; const n=(Number(localStorage.getItem(k))||0)+1; localStorage.setItem(k,String(n)); document.getElementById('visitCounter').textContent=`👥 คุณเข้าใช้ระบบนี้แล้ว ${n} ครั้ง`; })();
+(function(){
+  const k="siemsi_visit_count";
+  const n=(Number(localStorage.getItem(k))||0)+1;
+  localStorage.setItem(k,String(n));
+  document.getElementById('visitCounter').textContent=`จำนวนผู้ใช้ในระบบ ${n} ครั้ง`;
+})();
 
 /* start */
 render();
-addEventListener('resize', ()=>{ const box=document.getElementById('verseBox'); const verseEl=document.getElementById('verse'); verseEl.style.fontSize=''; fitTextToBox(verseEl,box); });
+addEventListener('resize', ()=>{
+  const box=document.getElementById('verseBox');
+  const verseEl=document.getElementById('verse');
+  verseEl.style.fontSize=''; fitTextToBox(verseEl,box);
+});
 </script>
 </body>
 </html>

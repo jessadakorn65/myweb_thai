@@ -19,27 +19,24 @@
   body{
     font-family:"Taviraj","Noto Serif Thai","Charm",serif;
     margin:0; min-height:100vh;
-    background: radial-gradient(circle at 50% -20%, #5b1a1a, #2a0c0c 80%);
+    background: linear-gradient(to bottom, #5b1a1a, #2a0c0c, #2a0c0c);
     color:var(--ink);
   }
   body.theme-ram{ --paper:#f4e6cc; --paper-tint:#f0dab2; --card:#f6e6cacc; --border:#d5a449; --pill-bg:#ffe6b8; }
   body.theme-kckp{ --paper:#efe1cc; --paper-tint:#e8d4b7; --card:#f3e4cdcc; --border:#cfa059; --pill-bg:#ffe0b5; }
 
-  /* แผ่นกระดาษหลัก + กรอบรอบทั้งหน้า */
   #sheet{
     background:
       radial-gradient(140% 100% at 50% -20%, var(--paper-tint), transparent 60%),
       var(--paper);
     border-color:rgba(255,255,255,.35);
     position:relative;
-    /* กรอบทองคู่ */
     border: 6px double #d4a94a;
     box-shadow:
       0 0 22px rgba(0,0,0,.35),
       inset 0 0 14px rgba(212,169,74,.35);
   }
 
-  /* ลายกรอบมุมไทย 4 มุม */
   .corner-decor{
     position:absolute; width:62px; height:62px; opacity:.96;
     filter: drop-shadow(0 1px 0 rgba(255,255,255,.6))
@@ -57,7 +54,6 @@
     box-shadow:0 2px 8px rgba(0,0,0,.10);
   }
 
-  /* กล่องกลอน + ฉากตัวละคร */
   #verseBox{
     position:relative; display:flex; align-items:center; justify-content:center;
     min-height:var(--box-min-h); max-height:var(--box-max-h);
@@ -96,7 +92,6 @@
   *::-webkit-scrollbar-thumb{ background:rgba(123,59,0,.55); border-radius:999px }
   *::-webkit-scrollbar-track{ background:rgba(255,241,204,.35) }
 
-  /* ===== Thai plaque (หัวข้อบนป้ายสี #ffedc6) ===== */
   .thai-plaque{
     position:relative;
     margin:.25rem auto 0;
@@ -105,7 +100,7 @@
     border-radius:18px;
     background:linear-gradient(180deg,#ffedc6,#ffe4b8 62%,#ffedc6 100%);
     border:2.5px solid #d4a94a;
-    box-shadow:
+    box-shadow: 
       inset 0 2px 0 rgba(255,255,255,.8),
       inset 0 -6px 18px rgba(0,0,0,.08),
       0 6px 20px rgba(0,0,0,.22);
@@ -124,7 +119,6 @@
   .orn.bot-left{ left:-6px; bottom:-6px; transform:rotate(270deg); }
   .thai-plaque #title{ font-size: clamp(22px, 4.6vw, 44px); }
 
-  /* ===== ลายดอกบัว/เมฆไทย กันโล่งด้านล่าง ===== */
   .bottom-ornament{
     margin-top:2.4rem;
     display:flex; justify-content:center;
@@ -134,6 +128,68 @@
     max-width:420px; width:90%;
     filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
   }
+
+  .thai-btn {
+  display: inline-block;
+  padding: 0.4rem 1rem; /* ค่า default สำหรับจอเล็ก */
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 600;
+  font-size: clamp(14px, 2vw, 18px); /* เล็กลงหน่อย */
+  color: var(--soft-cream, #fff);
+  background: linear-gradient(135deg, #e7c88d, #d4a373);
+  border: 2px solid #d4a373;
+  border-radius: 0.6rem;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-width: 48%; /* ป้องกันปุ่มอ้วนเต็มหน้าจอ */
+}
+
+@media (min-width: 640px) { /* tablet ขึ้นไป */
+  .thai-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: clamp(15px, 1.5vw, 18px);
+    max-width: 200px;
+  }
+}
+
+@media (min-width: 1024px) { /* desktop */
+  .thai-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: clamp(16px, 1vw, 20px);
+    max-width: 220px;
+  }
+}
+
+.thai-btn:hover {
+  background: linear-gradient(135deg, #d4a373, #e7c88d);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+}
+
+/* มือถือ: ตัดบรรทัดอัตโนมัติ */
+@media (max-width: 640px) {
+  #verseModal #fullVerse,
+  #meaningModal #fullMeaning,
+  #verse {
+    white-space: normal !important;   /* ให้ขึ้นบรรทัดใหม่อัตโนมัติ */
+    word-break: break-word !important; /* บังคับตัดคำถ้ายาวเกิน */
+    text-align: left !important;      /* จัดชิดซ้าย อ่านง่าย */
+    line-height: 1.6 !important;      /* ลดการเว้นบรรทัด */
+    font-weight: 500 !important;      /* เบาฟอนต์ให้อ่านง่าย */
+  }
+}
+
+
+  /* คำทำนายในป๊อปอัพ */
+  #meaningModal #fullMeaning {
+    white-space: normal !important;
+    text-align: left !important;
+    line-height: 1.6 !important;
+    font-weight: 500 !important;
+  }
+
+
 </style>
 </head>
 
@@ -201,19 +257,15 @@
 
   <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2 sm:gap-0">
     <div id="visitCounter" class="font-bold px-3 py-1 rounded-xl text-sm card">กำลังโหลดตัวนับ…</div>
-    <button id="nextBtn" class="btn-primary px-4 py-2 md:px-6 md:py-3 text-[clamp(14px,2vw,18px)]">ไปหน้าถัดไป</button>
+    
   </div>
 
-  <!-- ลายดอกบัว/เมฆไทยกันโล่งด้านล่าง (SVG ฝัง) -->
   <div class="bottom-ornament">
     <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- เมฆไทย -->
       <path d="M40 110c20-26 58-40 94-30 18-32 64-40 98-18 14-24 46-38 76-28 24-30 76-30 104 2 28-10 60 6 72 30 36-12 72 2 88 24"
             fill="none" stroke="#e8c46b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M54 114c26-18 54-16 80-4M200 92c22-10 44-10 66 0M320 84c20-8 42-8 62 0M436 96c24-12 48-10 70 0"
             fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- ดอกบัวกลาง -->
       <g transform="translate(300,70) scale(1.1)">
         <path d="M0-30 C8-10, 18-6, 0,20 C-18-6,-8-10,0-30z" fill="#ffedc6" stroke="#d4a94a" stroke-width="3"/>
         <path d="M0-18 C10-6, 14-2, 0,12 C-14-2,-10-6,0-18z" fill="#ffe4b8" stroke="#e8c46b" stroke-width="2"/>
@@ -223,14 +275,50 @@
   </div>
 </main>
 
-<!-- Modal -->
+
+<!-- Modal แรก: กลอน -->
 <div id="verseModal" class="fixed inset-0 bg-black/50 hidden justify-center items-center z-50 p-4">
   <div class="rounded-xl p-6 max-w-[90%] max-h-[80%] overflow-auto shadow-2xl relative" style="background:var(--paper)">
     <button class="absolute top-4 right-4 font-bold text-xl soft-cream" onclick="closeVerseModal()">✖</button>
-    <h2 class="text-center font-extrabold text-2xl mb-4 soft-cream">บทกลอนเต็ม</h2>
-    <pre id="fullVerse" class="text-[clamp(16px,2.5vw,28px)]" style="white-space:pre-wrap; line-height:1.9"></pre>
+    <h2 class="text-center font-extrabold text-2xl mb-4 soft-cream">คำทำนาย</h2>
+    
+    <!-- กลอน -->
+    <pre id="fullVerse" 
+     class="text-[clamp(16px,2.5vw,28px)] mb-4 
+            max-h-[50vh] overflow-y-auto 
+            p-3 rounded-lg border border-[var(--border)] bg-[var(--card)]"
+     style="white-space:pre-wrap; line-height:1.9">
+</pre>
+
+    
+    <!-- ปุ่มไปดูความหมาย -->
+     <button id="toMeaningBtn" class="thai-btn">ดูคำทำนาย</button>
   </div>
 </div>
+
+<!-- Modal สอง: ความหมาย -->
+<div id="meaningModal" class="fixed inset-0 bg-black/50 hidden justify-center items-center z-50 p-4">
+  <div class="rounded-xl p-6 max-w-[90%] max-h-[80%] overflow-auto shadow-2xl relative" style="background:var(--paper)">
+    <button class="absolute top-4 right-4 font-bold text-xl soft-cream" onclick="closeMeaningModal()">✖</button>
+    <h2 class="text-center font-extrabold text-2xl mb-4 soft-cream">คำทำนาย</h2>
+    
+    <div id="fullMeaning" 
+     class="text-[clamp(15px,2.3vw,22px)] leading-relaxed 
+            p-3 rounded-lg border border-[var(--border)] bg-[var(--card)] 
+            max-h-[50vh] overflow-y-auto">
+</div>
+
+
+      <!-- กล่องปุ่ม -->
+     <div class="flex justify-between gap-2 mt-4">
+      <button onclick="backToVerse()" class="thai-btn">กลับไปดูกลอน</button>
+      <button id="nextBtn" class="thai-btn">ไปหน้าถัดไป</button>
+    </div>
+
+
+</div>
+
+
 
 <script>
 /* ====== ข้อมูลตัวอย่าง ====== */
@@ -388,22 +476,24 @@ const DATA = {
 หากเกี่ยวกับสุขภาพ ควรปรึกษาแพทย์และขอความช่วยเหลือจากรอบข้าง
 อย่าแบกไว้คนเดียว`,note:`ตอนนางพิมเจ็บ`}
 };
-/* กลุ่มเรื่อง */
+
 const RAM  = new Set([1,2,3,4,5,6,7,15,16,17,18,19,20,21]);
 const KCKP = new Set([8,9,10,11,12,13,14,22,23,24,25,26,27,28]);
 
-/* Utils */
-function getVerseSummary(t, maxLines=3){ const L=t.split('\n'); return L.slice(0,maxLines).join('\n')+(L.length>maxLines?' …':''); }
+function getVerseSummary(t, maxLines=3){
+  const L=t.split('\n'); return L.slice(0,maxLines).join('\n')+(L.length>maxLines?' …':'');
+}
 function fitTextToBox(el, box, minSize=12, maxSize=30){
   let size=Math.min(maxSize,Math.max(minSize,Math.floor(box.clientWidth/22)));
   el.style.fontSize=size+'px';
   const maxW=box.clientWidth*0.94, maxH=box.clientHeight*0.96;
   for(let i=0;i<60;i++){ if(el.scrollWidth<=maxW && el.scrollHeight<=maxH) break; size-=.5; if(size<=minSize) break; el.style.fontSize=size+'px';}
 }
-/* เลือกพาธภาพอัตโนมัติ ./ หรือ ./images/ */
-function pickUrl(base){ const a=`./${base}`, b=`./images/${base}`; const img=new Image(); return new Promise(r=>{ img.onload=()=>r(a); img.onerror=()=>r(b); img.src=a; }); }
-
-/* ธีม + set รูป */
+function pickUrl(base){
+  const a=`./${base}`, b=`./images/${base}`;
+  const img=new Image();
+  return new Promise(r=>{ img.onload=()=>r(a); img.onerror=()=>r(b); img.src=a; });
+}
 async function applyThemeById(id){
   const left = document.getElementById('bgLeft');
   const right= document.getElementById('bgRight');
@@ -414,7 +504,7 @@ async function applyThemeById(id){
   right.src= await pickUrl(rightName);
 }
 
-/* Render */
+/* ===== Render ===== */
 function render(){
   let id = Number(sessionStorage.getItem('siemsiStick')) || 13;
   sessionStorage.setItem('siemsiStick', String(id));
@@ -433,30 +523,109 @@ function render(){
   document.getElementById('note').textContent    = item.note;
 }
 
-/* Modal */
 function openVerseModal(){
-  const id=Number(sessionStorage.getItem('siemsiStick'))||13;
-  const item=DATA[id]||Object.values(DATA)[0];
-  document.getElementById('fullVerse').textContent=item.verse;
-  const m=document.getElementById('verseModal'); m.classList.remove('hidden'); m.classList.add('flex');
+  const id = Number(sessionStorage.getItem('siemsiStick')) || 13;
+  const item = DATA[id] || Object.values(DATA)[0];
+
+  // ใส่กลอน
+  document.getElementById('fullVerse').textContent = item.verse;
+
+  // ใส่ความหมายล่วงหน้า (แต่ยังไม่โชว์)
+  document.getElementById('fullMeaning').textContent = item.meaning;
+
+  // เปิด modal กลอน
+  const verseModal = document.getElementById('verseModal');
+  verseModal.classList.remove('hidden');
+  verseModal.classList.add('flex');
+
+  // ปุ่มไปดูความหมาย
+  document.getElementById('toMeaningBtn').onclick = function(){
+    verseModal.classList.add('hidden');
+    verseModal.classList.remove('flex');
+    openMeaningModal();
+  }
 }
+
 function closeVerseModal(){
-  const m=document.getElementById('verseModal'); m.classList.add('hidden'); m.classList.remove('flex');
+  const m = document.getElementById('verseModal');
+  m.classList.add('hidden');
+  m.classList.remove('flex');
 }
+
+function openMeaningModal(){
+  const m = document.getElementById('meaningModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+}
+
+function closeMeaningModal(){
+  const m = document.getElementById('meaningModal');
+  m.classList.add('hidden');
+  m.classList.remove('flex');
+}
+
+function backToVerse(){
+  closeMeaningModal();
+  openVerseModal();
+}
+
 
 /* ปุ่มไปหน้า form.html */
 document.getElementById('nextBtn').addEventListener('click', ()=>{ window.location.href='form.html'; });
 
-/* counter */
-(function(){
-  const k="siemsi_visit_count";
-  const n=(Number(localStorage.getItem(k))||0)+1;
-  localStorage.setItem(k,String(n));
-  document.getElementById('visitCounter').textContent=`จำนวนผู้ใช้ในระบบ ${n} ครั้ง`;
-})();
+
+
+
+
+/* =========================
+   COUNTER (CountAPI + Fallback)
+   ========================= */
+async function initCounterWithCountAPI(){
+  const el = document.getElementById('visitCounter');
+  el.textContent = 'กำลังโหลดตัวนับ…';
+
+  // ตั้ง namespace จากโฮสต์เว็บเพื่อลดการชนกับโปรเจกต์อื่น
+  const NAMESPACE = (location.host || 'local').replace(/\W/g,'_') || 'local_namespace';
+  // แก้ชื่อตามต้องการ เช่น 'siemsi_total' หรือแบ่งหน้าด้วย path
+  const KEY = 'siemsi_total';
+
+  // helper: timeout ป้องกันรอเน็ตค้าง
+  const withTimeout = (promise, ms=5000) => {
+    const ctl = new AbortController();
+    const id = setTimeout(()=>ctl.abort(), ms);
+    return promise.finally(()=>clearTimeout(id));
+  };
+
+  try {
+    // 1) สร้าง key ถ้ายังไม่มี (value เริ่มที่ 0) — ถ้ามีอยู่แล้ว API จะคืน error ก็ไม่เป็นไร
+    await withTimeout(
+      fetch(`https://api.countapi.xyz/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`)
+        .catch(()=>{}) // เงียบ error ได้
+    );
+
+    // 2) นับ +1
+    const resp = await withTimeout(
+      fetch(`https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`)
+    );
+    const data = await resp.json();
+    if (typeof data.value === 'number') {
+      el.textContent = `จำนวนผู้ใช้ในระบบ ${data.value.toLocaleString('th-TH')} ครั้ง`;
+      return;
+    }
+    throw new Error('bad response');
+  } catch (err) {
+    // ===== โหมดสำรอง (ออฟไลน์/บริการล่ม) =====
+    const k="siemsi_visit_count_fallback";
+    const n=(Number(localStorage.getItem(k))||0)+1;
+    localStorage.setItem(k,String(n));
+    el.textContent = `จำนวนผู้ใช้ในระบบ ${n.toLocaleString('th-TH')} ครั้ง (โหมดสำรอง)`;
+  }
+}
 
 /* start */
 render();
+initCounterWithCountAPI();
+
 addEventListener('resize', ()=>{
   const box=document.getElementById('verseBox');
   const verseEl=document.getElementById('verse');

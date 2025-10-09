@@ -3,611 +3,664 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ผลการเสี่ยงเซียมซี</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Noto+Serif+Thai:wght@400;600;700&family=Taviraj:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>ผลการเสี่ยงเซียมซีวรรณคดีไทย</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <style>
-  :root{
-    --bg-grad-1:#5b1a1a; --bg-grad-2:#2a0c0c;
-    --paper:#f6ecd6; --paper-tint:#f3e3c2; --card:#faefdbcc;
-    --border:#deb35a; --ink:#3e280e; --accent:#7b3b00; --accent-2:#945000;
-    --pill-bg:#fff1cc; --pill-ink:#7b3b00;
-    --box-min-h: 220px; --box-max-h: 58vh;
-  }
+
+
+
+
+
+  html,body{overflow-x:hidden;}
+  body.modal-open{overflow:hidden;}
+
+  body{background:linear-gradient(to bottom,#5b1a1a,#2a0c0c);color:#f6ecd6;font-family:"Noto Serif Thai",serif;}
+
+  /* Image Modal base */
+  #imageModal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;overflow:hidden;z-index:40;touch-action:none;}
+  #popupImage{max-width:95vw;max-height:90vh;transform-origin:center center;transition:transform .2s ease;user-select:none;}
+  #zoomControl{position:absolute;bottom:20px;right:20px;background:rgba(255,255,255,.9);color:#3e280e;border-radius:50%;width:50px;height:50px;font-size:1.5rem;box-shadow:0 3px 8px rgba(0,0,0,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:50}
+  #zoomControl:hover{background:#ffe073;transform:scale(1.1);}
+
+  /* Text Modal */
+  #textModal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:50;padding:1.25rem;}
+  #textBox{background:#f6ecd6;color:#3e280e;border-radius:18px;max-width:44rem;max-height:85vh;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.45);padding:1.25rem 1.25rem 1.5rem;position:relative}
+  #closeText{position:absolute;right:.75rem;top:.5rem;font-size:1.25rem;color:#5b1a1a}
+
+  /* helper */
+  .link-more{color:#7a2a00;text-decoration:underline;text-underline-offset:3px}
+
+
+  html,body{overflow-x:hidden;}
+  body.modal-open{overflow:hidden;}
   body{
-    font-family:"Taviraj","Noto Serif Thai","Charm",serif;
-    margin:0; min-height:100vh;
-    background: linear-gradient(to bottom, #5b1a1a, #2a0c0c, #2a0c0c);
-    color:var(--ink);
-  }
-  body.theme-ram{ --paper:#f4e6cc; --paper-tint:#f0dab2; --card:#f6e6cacc; --border:#d5a449; --pill-bg:#ffe6b8; }
-  body.theme-kckp{ --paper:#efe1cc; --paper-tint:#e8d4b7; --card:#f3e4cdcc; --border:#cfa059; --pill-bg:#ffe0b5; }
-
-  #sheet{
-    background:
-      radial-gradient(140% 100% at 50% -20%, var(--paper-tint), transparent 60%),
-      var(--paper);
-    border-color:rgba(255,255,255,.35);
-    position:relative;
-    border: 6px double #d4a94a;
-    box-shadow:
-      0 0 22px rgba(0,0,0,.35),
-      inset 0 0 14px rgba(212,169,74,.35);
+    background: radial-gradient(circle at top, #7a2a00 0%, #2a0c0c 70%);
+    color:#f6ecd6;
+    font-family:"Noto Serif Thai",serif;
   }
 
-  .corner-decor{
-    position:absolute; width:62px; height:62px; opacity:.96;
-    filter: drop-shadow(0 1px 0 rgba(255,255,255,.6))
-            drop-shadow(0 2px 6px rgba(0,0,0,.18));
-    pointer-events:none;
-  }
-  .corner-decor.tl{ top:-6px; left:-6px; }
-  .corner-decor.tr{ top:-6px; right:-6px; transform:scaleX(-1); }
-  .corner-decor.bl{ bottom:-6px; left:-6px; transform:scaleY(-1); }
-  .corner-decor.br{ bottom:-6px; right:-6px; transform:scale(-1); }
-
-  .pill{
-    background:var(--pill-bg); border:1.5px solid var(--border); color:var(--pill-ink);
-    border-radius:999px; padding:.28rem .66rem; font-weight:800; font-size:.9rem;
-    box-shadow:0 2px 8px rgba(0,0,0,.10);
+  /* Header */
+  header h1 {
+    background: linear-gradient(90deg, #ffd97d, #ffcf58, #f0b93d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
   }
 
-  #verseBox{
-    position:relative; display:flex; align-items:center; justify-content:center;
-    min-height:var(--box-min-h); max-height:var(--box-max-h);
-    padding:1rem; border-radius:1rem; cursor:pointer;
-    background-size:cover; background-position:center;
-    box-shadow: inset 0 6px 18px rgba(0,0,0,.25), 0 2px 0 rgba(0,0,0,.06);
-    overflow:hidden;
-  }
-  #verseBox::after{
-    content:""; position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(245,232,205,.55), rgba(245,232,205,.15));
-    pointer-events:none; z-index:2;
-  }
-  .bg-art{ position:absolute; bottom:0; z-index:1; opacity:.95; filter:drop-shadow(0 12px 24px rgba(0,0,0,.35)); pointer-events:none; max-height:92%; }
-  .bg-left{ left:-1%; width:clamp(140px,34vw,280px);}
-  .bg-right{ right:-3%; width:clamp(140px,34vw,280px); transform:scaleX(-1);}
-
-  #verse{
-    position:relative; z-index:3;
-    margin:0; text-align:center; white-space:pre-wrap; word-break:break-word; line-height:1.9; font-weight:800;
-    color:#2d1606;
-    text-shadow:0 1px 0 rgba(255,255,255,.45), 1px 1px 2px rgba(0,0,0,.55), 0 0 10px rgba(255,245,225,.35);
-  }
-  .card{
-    background:var(--card); border:1.5px solid var(--border); color:var(--ink);
-    border-radius:1rem; box-shadow:inset 0 3px 10px rgba(0,0,0,.06);
-  }
-  .btn-primary{
-    background:var(--accent); color:#ffe8b8; border-radius:12px; font-weight:800;
-    box-shadow:0 6px 16px rgba(0,0,0,.22);
-    transition:transform .15s ease, background .15s ease;
-  }
-  .btn-primary:hover{ transform:translateY(-2px) scale(1.04); background:var(--accent-2); }
-  .soft-cream{ color:#6f3906; }
-  *::-webkit-scrollbar{ width:10px; height:10px } 
-  *::-webkit-scrollbar-thumb{ background:rgba(123,59,0,.55); border-radius:999px }
-  *::-webkit-scrollbar-track{ background:rgba(255,241,204,.35) }
-
-  .thai-plaque{
-    position:relative;
-    margin:.25rem auto 0;
-    padding:14px;
-    width:min(920px,96%);
-    border-radius:18px;
-    background:linear-gradient(180deg,#ffedc6,#ffe4b8 62%,#ffedc6 100%);
-    border:2.5px solid #d4a94a;
-    box-shadow: 
-      inset 0 2px 0 rgba(255,255,255,.8),
-      inset 0 -6px 18px rgba(0,0,0,.08),
-      0 6px 20px rgba(0,0,0,.22);
-  }
-  .thai-plaque::before{
-    content:""; position:absolute; inset:6px;
-    border-radius:14px; border:2px solid #e8c46b; pointer-events:none;
-  }
-  .plaque-inner{ display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center; justify-content:center; }
-  #title{ margin:0; font-weight:800; letter-spacing:.5px; color:#5b2a06; text-shadow:0 1px 0 rgba(255,255,255,.6); }
-  .pill{ background:#fff5da; border:1.6px solid #d4a94a; color:#7b3b00; }
-  .orn{ position:absolute; width:34px; height:34px; opacity:.95; filter: drop-shadow(0 1px 0 rgba(255,255,255,.6)) drop-shadow(0 2px 6px rgba(0,0,0,.18)); pointer-events:none; }
-  .orn.top-left{ left:-6px; top:-6px; }
-  .orn.top-right{ right:-6px; top:-6px; transform:rotate(90deg); }
-  .orn.bot-right{ right:-6px; bottom:-6px; transform:rotate(180deg); }
-  .orn.bot-left{ left:-6px; bottom:-6px; transform:rotate(270deg); }
-  .thai-plaque #title{ font-size: clamp(22px, 4.6vw, 44px); }
-
-  .bottom-ornament{
-    margin-top:2.4rem;
-    display:flex; justify-content:center;
-    opacity:.95;
-  }
-  .bottom-ornament svg{
-    max-width:420px; width:90%;
-    filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+  /* Card Section */
+  section {
+    background: linear-gradient(135deg, #ffedc6, #faefdb);
+    border: 1.5px solid #e4c676;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,200,0.2);
+    backdrop-filter: blur(2px);
   }
 
-  .thai-btn {
-  display: inline-block;
-  padding: 0.4rem 1rem; /* ค่า default สำหรับจอเล็ก */
-  font-family: 'Sarabun', sans-serif;
-  font-weight: 600;
-  font-size: clamp(14px, 2vw, 18px); /* เล็กลงหน่อย */
-  color: var(--soft-cream, #fff);
-  background: linear-gradient(135deg, #e7c88d, #d4a373);
-  border: 2px solid #d4a373;
-  border-radius: 0.6rem;
-  box-shadow: 0 3px 5px rgba(0,0,0,0.15);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  max-width: 48%; /* ป้องกันปุ่มอ้วนเต็มหน้าจอ */
+  #fortuneTitle {
+    color:#7a2a00;
+    text-shadow: 0 2px 4px rgba(255,220,120,0.4);
+  }
+
+  #fortuneDesc {
+    background: rgba(255,248,230,0.9);
+    border: 2px solid #d6b26d;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: inset 0 0 10px rgba(255,230,150,0.3);
+  }
+
+  /* Image hover */
+  #fortuneImage {
+    transition: all .4s ease;
+  }
+  #fortuneImage:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 12px #ffdd77);
+  }
+
+  /* --- MENU --- */
+  #mainMenuBtn {
+    background: radial-gradient(circle at top left, #fff7b3, #e6b800);
+    border: 2px solid #d9a400;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    transition: all .25s ease;
+  }
+  #mainMenuBtn:hover {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: 0 0 25px #ffd54f;
+  }
+
+  /* Dropdown menu animation */
+  #dropdownMenu {
+    animation: fadeInUp .35s ease both;
+    border: 1.5px solid #deb35a;
+    background: linear-gradient(145deg,#fff4d2,#f6ecd6);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,200,0.4);
+    transform-origin: bottom right;
+  }
+  @keyframes fadeInUp {
+    from {opacity:0; transform: translateY(20px) scale(0.9);}
+    to {opacity:1; transform: translateY(0) scale(1);}
+  }
+
+  #dropdownMenu button, #dropdownMenu a {
+    transition: all .2s ease;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  #dropdownMenu button:hover, #dropdownMenu a:hover {
+    background: #ffe8b0;
+    color:#5b1a1a;
+    transform: translateX(-3px);
+    box-shadow: inset -3px 0 6px rgba(90,50,0,0.2);
+  }
+
+  /* Modal backdrop */
+  #textModal, #imageModal {
+    backdrop-filter: blur(8px) brightness(0.95);
+  }
+
+  #textBox {
+    border: 2px solid #e0c36c;
+    background: linear-gradient(to bottom right, #ffe09d, #f6e3ba);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.45), inset 0 0 20px rgba(255,230,140,0.4);
+  }
+
+  #closeText {
+    transition:.25s ease;
+  }
+  #closeText:hover {
+    transform: rotate(90deg) scale(1.3);
+    color: #b30000;
+    text-shadow: 0 0 6px #ffaaaa;
+  }
+
+  /* "อ่านต่อ" ลิงก์ */
+  .link-more {
+    color: #a15d00;
+    font-weight: 600;
+    border-bottom: 1px dotted #a15d00;
+    padding-bottom: 2px;
+  }
+  .link-more:hover {
+    color: #d98c00;
+    text-shadow: 0 0 5px #ffdc73;
+  }
+
+  #katoonOverlay {
+  animation: fadeIn 0.3s ease forwards;
+}
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 
-@media (min-width: 640px) { /* tablet ขึ้นไป */
-  .thai-btn {
-    padding: 0.5rem 1.25rem;
-    font-size: clamp(15px, 1.5vw, 18px);
-    max-width: 200px;
+#katoonImg {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+}
+#katoonImg.scale-0 {
+  transform: scale(0);
+}
+/* 🐒 Animation ลอยและ fade-in */
+@keyframes floaty {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-float { animation: floaty 5s ease-in-out infinite; }
+.animate-fade-in { animation: fadeIn 1s ease-out; }
+
+/* 💬 กล่องคำพูด */
+#speechBubble.show { opacity: 1; transform: scale(1); }
+
+/* 🧱 Responsive */
+@media (max-width: 480px) {
+  #katoonOverlay {
+    bottom: 4.5rem;
+    left: 0.5rem;
+    transform: scale(0.9);
   }
-}
-
-@media (min-width: 1024px) { /* desktop */
-  .thai-btn {
-    padding: 0.6rem 1.5rem;
-    font-size: clamp(16px, 1vw, 20px);
-    max-width: 220px;
-  }
-}
-
-.thai-btn:hover {
-  background: linear-gradient(135deg, #d4a373, #e7c88d);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0,0,0,0.2);
-}
-
-/* มือถือ: ตัดบรรทัดอัตโนมัติ */
-@media (max-width: 640px) {
-  #verseModal #fullVerse,
-  #meaningModal #fullMeaning,
-  #verse {
-    white-space: normal !important;   /* ให้ขึ้นบรรทัดใหม่อัตโนมัติ */
-    word-break: break-word !important; /* บังคับตัดคำถ้ายาวเกิน */
-    text-align: left !important;      /* จัดชิดซ้าย อ่านง่าย */
-    line-height: 1.6 !important;      /* ลดการเว้นบรรทัด */
-    font-weight: 500 !important;      /* เบาฟอนต์ให้อ่านง่าย */
+  #speechBubble {
+    max-width: 180px;
+    font-size: 0.85rem;
   }
 }
 
 
-  /* คำทำนายในป๊อปอัพ */
-  #meaningModal #fullMeaning {
-    white-space: normal !important;
-    text-align: left !important;
-    line-height: 1.6 !important;
-    font-weight: 500 !important;
-  }
+/* 🪄 พื้นหลังมืด */
+#katoonWrapper {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  z-index: 60;          /* อยู่ล่างสุดของชุด overlay */
+  pointer-events: none;
+}
+#katoonWrapper.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
+/* 🍀 เมนู */
+#mainMenuBtn {
+  z-index: 90 !important;  /* ปุ่มเมนูอยู่บนสุด */
+}
+#dropdownMenu {
+  z-index: 85 !important;  /* กล่องเมนูอยู่ระหว่างหนุมานกับปุ่ม */
+}
+
 
 
 </style>
+
+</style>
 </head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
 
-<body class="flex justify-center items-start theme-kckp">
-<main id="sheet" class="relative w-full max-w-[980px] flex flex-col justify-between min-h-screen rounded-2xl shadow-2xl overflow-hidden p-4 sm:p-6 md:p-8">
-  <!-- ลายมุมกรอบรอบหน้า -->
-  <svg class="corner-decor tl" viewBox="0 0 80 80" aria-hidden="true">
-    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
-  </svg>
-  <svg class="corner-decor tr" viewBox="0 0 80 80" aria-hidden="true">
-    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
-  </svg>
-  <svg class="corner-decor bl" viewBox="0 0 80 80" aria-hidden="true">
-    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
-  </svg>
-  <svg class="corner-decor br" viewBox="0 0 80 80" aria-hidden="true">
-    <path d="M12,68 C20,46 36,32 58,24 44,22 34,16 28,8 22,20 16,34 12,68" fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M18,58 Q30,44 50,36" fill="none" stroke="#e8c46b" stroke-width="3" stroke-linecap="round"/>
-  </svg>
+<header class="text-center mb-8 w-full">
+  <h1 class="thai-border text-[clamp(1.7rem,5vw,2.8rem)] font-bold drop-shadow-[0_2px_5px_rgba(0,0,0,0.4)]">
+    ผลการเสี่ยงเซียมซี
+  </h1>
+  <p id="stickNum" class="text-[clamp(1rem,3vw,1.25rem)] mt-2 opacity-90"></p>
+</header>
 
-  <!-- ป้ายหัวข้อทรงไทย -->
-  <header class="thai-plaque">
-    <!-- มุมเล็กบนป้าย -->
-    <svg class="orn top-left"  viewBox="0 0 64 64" aria-hidden="true">
-      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
-    </svg>
-    <svg class="orn top-right" viewBox="0 0 64 64" aria-hidden="true">
-      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
-    </svg>
-    <svg class="orn bot-right" viewBox="0 0 64 64" aria-hidden="true">
-      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
-    </svg>
-    <svg class="orn bot-left" viewBox="0 0 64 64" aria-hidden="true">
-      <path d="M32 6c6 8 10 16 10 22 0 10-8 18-18 18C18 46 10 38 10 28c0-6 4-14 10-22" fill="none" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 34c8-2 14-2 20 0M14 40c6-2 12-2 18 0" fill="none" stroke="#e8c46b" stroke-width="2" />
-    </svg>
+<section class="bg-[#faefdbdd] text-[#3e280e] rounded-2xl shadow-2xl p-5 sm:p-7 md:p-9 max-w-3xl w-full border border-[#d6b26d]/50">
+  <h2 id="fortuneTitle" class="text-[clamp(1.3rem,4vw,2rem)] font-bold text-center mb-5 text-[#7a2a00]"></h2>
 
-    <div class="plaque-inner">
-      <h1 id="title">คำทำนาย — ใบที่ —</h1>
-      <div class="flex items-center gap-2">
-        <span id="drawBadge" class="pill">ใบที่ —</span>
-        <span id="seriesBadge" class="pill">—</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- กลอน + ฉาก -->
-  <div id="verseBox" class="mt-3" onclick="openVerseModal()">
-    <img id="bgLeft"  class="bg-art bg-left"  alt="" onerror="this.style.display='none'">
-    <img id="bgRight" class="bg-art bg-right" alt="" onerror="this.style.display='none'">
-    <pre id="verse"></pre>
+  <div class="flex flex-col items-center space-y-5">
+    <img id="fortuneImage" src=""
+         class="w-full max-w-[90vw] md:max-w-md rounded-xl shadow-lg cursor-pointer object-contain transition" />
+    <p id="fortuneDesc" class="text-[clamp(1rem,3vw,1.25rem)] leading-relaxed text-justify px-3 sm:px-5"></p>
   </div>
-
-  <div class="card p-3 sm:p-4 md:p-5 w-full mt-4">
-    <div id="meaning" class="text-[clamp(15px,2.3vw,22px)] leading-relaxed"></div>
-  </div>
-
-  <div id="note" class="font-extrabold soft-cream text-[clamp(14px,2vw,20px)] mt-2"></div>
-
-  <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2 sm:gap-0">
-    <div id="visitCounter" class="font-bold px-3 py-1 rounded-xl text-sm card">กำลังโหลดตัวนับ…</div>
-    
-  </div>
-
-  <div class="bottom-ornament">
-    <svg viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M40 110c20-26 58-40 94-30 18-32 64-40 98-18 14-24 46-38 76-28 24-30 76-30 104 2 28-10 60 6 72 30 36-12 72 2 88 24"
-            fill="none" stroke="#e8c46b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M54 114c26-18 54-16 80-4M200 92c22-10 44-10 66 0M320 84c20-8 42-8 62 0M436 96c24-12 48-10 70 0"
-            fill="none" stroke="#d4a94a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <g transform="translate(300,70) scale(1.1)">
-        <path d="M0-30 C8-10, 18-6, 0,20 C-18-6,-8-10,0-30z" fill="#ffedc6" stroke="#d4a94a" stroke-width="3"/>
-        <path d="M0-18 C10-6, 14-2, 0,12 C-14-2,-10-6,0-18z" fill="#ffe4b8" stroke="#e8c46b" stroke-width="2"/>
-        <ellipse cx="0" cy="22" rx="28" ry="8" fill="none" stroke="#d4a94a" stroke-width="3"/>
-      </g>
-    </svg>
-  </div>
-</main>
+</section>
 
 
-<!-- Modal แรก: กลอน -->
-<!-- Modal แรก: กลอน -->
-<div id="verseModal" class="fixed inset-0 bg-black/50 hidden justify-center items-center z-50 p-4">
-  <div class="rounded-xl p-6 max-w-[90%] max-h-[80%] overflow-auto shadow-2xl relative" style="background:var(--paper)">
-    <button class="absolute top-4 right-4 font-bold text-xl soft-cream" onclick="closeVerseModal()">✖</button>
-    <h2 class="text-center font-extrabold text-2xl mb-4 soft-cream">คำทำนาย</h2>
-    
-    <!-- กลอน -->
-    <pre id="fullVerse" 
-     class="text-[clamp(16px,2.5vw,28px)] mb-4 
-            max-h-[50vh] overflow-y-auto 
-            p-3 rounded-lg border border-[var(--border)] bg-[var(--card)]"
-     style="white-space:pre-wrap; line-height:1.9">
-</pre>
+<!-- ปุ่มเมนู -->
+<!-- ปุ่มเมนู -->
+<div class="fixed bottom-6 right-6 z-[70]">
+  <button id="mainMenuBtn"
+    class="bg-gradient-to-b from-[#fff7b3] to-[#e6b800]
+           text-[#5b1a1a] p-3 rounded-full shadow-lg 
+           transition-all duration-300 ease-out
+           w-[55px] h-[55px] flex items-center justify-center text-2xl relative
+           hover:scale-110 hover:rotate-12 hover:shadow-[0_0_25px_#ffe973]
+           hover:from-[#fffac8] hover:to-[#ffdb4d] hover:brightness-110">
+    ☰
+  </button>
 
-    <!-- ปุ่มไปดูความหมาย (อยู่ตรงกลาง) -->
-    <div class="flex justify-center mt-4">
-      <button id="toMeaningBtn" class="thai-btn">ดูคำทำนาย</button>
-    </div>
+  <!-- เมนูที่เด้ง -->
+  <div id="dropdownMenu"
+       class="hidden flex-col bg-[#f6ecd6] text-[#3e280e] rounded-2xl shadow-2xl
+              mt-2 py-2 absolute bottom-16 right-0 w-44 z-[75] border border-[#deb35a]">
+    <button id="viewImageBtn" class="px-4 py-2 text-left hover:bg-[#ffe8b0]">อ่านกลอน</button>
+    <button id="viewFullTextBtn" class="px-4 py-2 text-left hover:bg-[#ffe8b0]">อ่านคำทำนาย</button>
+    <a href="form.html" class="px-4 py-2 text-left hover:bg-[#ffe8b0] block">ไปยังแบบฟอร์ม</a>
   </div>
 </div>
 
 
-<!-- Modal สอง: ความหมาย -->
-<div id="meaningModal" class="fixed inset-0 bg-black/50 hidden justify-center items-center z-50 p-4">
-  <div class="rounded-xl p-6 max-w-[90%] max-h-[80%] overflow-auto shadow-2xl relative" style="background:var(--paper)">
-    <button class="absolute top-4 right-4 font-bold text-xl soft-cream" onclick="closeMeaningModal()">✖</button>
-    <h2 class="text-center font-extrabold text-2xl mb-4 soft-cream">คำทำนาย</h2>
-    
-    <div id="fullMeaning" 
-     class="text-[clamp(15px,2.3vw,22px)] leading-relaxed 
-            p-3 rounded-lg border border-[var(--border)] bg-[var(--card)] 
-            max-h-[50vh] overflow-y-auto">
+
+<!-- 🐒 หนุมานผู้พิทักษ์โชค -->
+<div id="katoonWrapper"
+     class="fixed flex flex-col items-center z-[80] transition-all duration-500 ease-out
+            bottom-[10px] left-[6px]
+            sm:bottom-[18px] sm:left-[14px]
+            md:bottom-[-100px] md:left-[24px]
+            lg:bottom-[36px] lg:left-[40px]
+            xl:bottom-[48px] xl:left-[60px]">
 </div>
 
 
-      <!-- กล่องปุ่ม -->
-     <div class="flex justify-between gap-2 mt-4">
-      <button onclick="backToVerse()" class="thai-btn">กลับไปดูกลอน</button>
-      <button id="nextBtn" class="thai-btn">ไปหน้าถัดไป</button>
-    </div>
+<div id="katoonOverlay"
+      class="fixed bottom-1 left-100 sm:bottom-6 sm:left-6 md:bottom-8 md:left-10 lg:bottom-10 lg:left-16
+            flex flex-col items-center z-[80] transition-all duration-300">
+  
+  <div id="speechBubble"
+       class="mb-2 bg-[#fff9db] text-[#3e280e] border-2 border-[#deb35a]
+              rounded-2xl px-3 py-2 shadow-md text-sm sm:text-base max-w-[220px]
+              transition-all duration-500 opacity-0 scale-90 relative">
+    <div class="absolute -bottom-[8px] left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-[#deb35a]"></div>
+    <span id="speechText">สวัสดีขอรับ! ขอให้โชคดีในการเสี่ยงทาย!   
+      เสร็จเเล้วขอความร่วมมือ   
+      กรอกเเบบฟอร์มด้วยนะขอรับ</span>
+  </div>
 
+  <img src="images/katoon.png"
+       id="katoonImg"
+       alt="หนุมานถือกระดาน"
+       class="w-[200px] sm:w-[200px] md:w-[300px] lg:w-[350px] xl:w-[350px]
+              drop-shadow-2xl animate-float" />
 
 </div>
 
 
+
+
+
+
+<!-- Image Modal -->
+<div id="imageModal" class="flex z-[60]"> <!-- z ต่ำกว่าเมนู -->
+  <img id="popupImage" src="">
+  <div id="zoomControl"
+       class="fixed bottom-6 right-6 bg-transparent text-transparent border-0
+              rounded-full w-[1px] h-[1px] opacity-0 pointer-events-none
+              z-[40] select-none">
+  </div>
+</div>
+
+
+
+<!-- Text Modal -->
+<div id="textModal" class="flex">
+  <div id="textBox">
+    <button id="closeText">✕</button>
+    <h3 id="popupTitle" class="text-xl font-bold mb-3"></h3>
+    <p id="popupText" class="text-[clamp(1rem,2.5vw,1.125rem)] leading-relaxed whitespace-pre-line"></p>
+  </div>
+</div>
 
 <script>
-/* ====== ข้อมูลตัวอย่าง ====== */
-const DATA = {
-  1:{series:"",verse:`ครานั้นพระพรหมผู้เรื่องศรี  ประทับเหนือบุษบกเมฆาไสว
-เห็นทารกพาลีวงศ์วานไกร      บุตรแห่งพระพายฤทธิ์เกรียงไกรปรากฏกาย
-จึงประสิทธิ์พรอันศักดิ์สิทธิ์      ประทานฤทธิ์เดชหาญมิรู้หาย
-อมตะเดชะมิอับปางตาย      ศัตรูทำลายมิอาจล่วงถึง
-เซียมชีใบนี้ได้ตอนที่ “หนุมานได้ฤทธิ์จากพระพรหม” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับหนุมานในตอนที่ได้รับฤทธิ์เดชจากพระพรหม เจ้าชะตาอยู่ในช่วงมีวาสนา ได้รับแรงเกื้อหนุนจากผู้ใหญ่หรือผู้มีบารมีคอยอุปถัมภ์ค้ำชู ดุจร่มเงาแห่งบุญกุศลที่ปกป้องคุ้มครอง เส้นทางที่ก้าวเดินจึงมีแนวโน้มราบรื่นและมั่นคง ทั้งในการงาน การเงิน และสุขภาพกายใจ หากหมั่นเพียรและดำรงความดี ย่อมได้รับการส่งเสริมให้สมหวัง แต่หนทางนี้ก็ยังแฝงด้วยบททดสอบซ่อนอยู่ ผู้เสี่ยงทายจึงควรใช้ปัญญาและความอดทนเป็นเกราะกำบัง จึงจะเห็นผลแห่งความเจริญยั่งยืน`,meaning:``,note:`(รามเกียรติ์, 2515 : 117)`},
-  2:{series:"",verse:`ครานั้นองค์พระรามทรงศักดิ์    เสร็จศึกใหญ่สิ้นพลังอสูรร้าย
-คืนสู่อโยธยานครประกาย      ราษฎร์ทั้งหลายโห่ร้องบันเทิงใจ
-พร้อมด้วยสีดามเหสีศรีสวัสดิ์    และพิเภกทศกัณฐ์ก็มิอาจต้านทานได้
-สุครีพหนุมานพลากรพลไกร     ต่างถวายชัยด้วยภักดีจงรัก
-เซียมชีใบนี้ได้ตอนที่ “พระรามได้ครองกรุงอโยธยา” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพระรามที่ได้กลับคืนมาปกครองยังกรุงยโยธยา บ้านเกิดของตนเจ้าชะตาอยู่ในช่วงมีวาสนาที่จะได้ประสบกับความสงบเย็นภายหลังจากเผชิญความทุกข์ยาก ความเป็นธรรมจะปรากฏดุจแสงที่ขับไล่เงามืด เปิดหนทางใหม่ให้ก้าวเดินไปอย่างมั่นคง งดงาม และสมบูรณ์ แม้หนทางข้างหน้าจะยังมีสิ่งเร้นลับซ่อนอยู่ แต่ก็เปี่ยมด้วยโอกาสและความหมาย ผู้ที่เพียรมั่นในคุณธรรมและไม่หวั่นต่อบททดสอบ ย่อมได้พบความร่มเย็นอันคู่ควรแก่ชะตาชีวิต`,meaning:``,note:`(รามเกียรติ์, 2515 : 174)`},
-  3:{series:"",verse:`เมื่อนั้นพระรามผู้ทรงศักดิ์            ต้องจำพรากจากเมืองด้วยเหตุผลนัก
-เสด็จสู่ป่าพร้อมพี่น้องและนางรัก   ทุกข์ยากหนักกลางดงพงไพร
-อาศัยเพิงเรือนร่มไม้แทนวัง          กินผลพลางหากินน้ำไหล
-อดทนต่อแดดฝนกลางป่าไพร       แต่หัวใจไม่สิ้นซื่อสัตย์มั่นคง`,meaning:`เซียมซีใบนี้ได้ตอนที่ ”พระรามเสด็จออกจากเมือง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องเสด็จออกจากเมืองไปอยู่ในป่า เจ้าชะตาอยู่ในช่วงชะตาชีวิตมีเค้าลางแห่งบททดสอบ ทั้งด้านกายและหน้าที่การงาน อุปสรรคดุจคลื่นลมถาโถม ทำให้ทุกย่างก้าวเต็มไปด้วยความเหนื่อยยาก ภายนอกอาจแลดูอุดมด้วยสิ่งยังชีพและที่พำนัก แต่ภายในใจยังแฝงด้วยความกังวลและความทุกข์ซ่อนเร้นยากจะหลีกหนี กระนั้นกาลเวลาก็ยังมิได้ปิดกั้นเส้นทางทั้งหมด ผู้ที่ตั้งมั่นด้วยสติและความอดทน จะค่อย ๆ แลเห็นประกายแสงรำไรฉายจากปลายฟ้า เป็นสัญญาณแห่งความคลี่คลายที่จะมาถึง เมื่อถึงกาลอันเหมาะสม`,note:`(รามเกียรติ์, 2515 : 294)`},
-  4:{series:"",verse:`โอ๋เอ๋พระลักษณ์ผู้ร่วมไตร       เห็นน้องไฉนจึงไม่อยู่
-ข้าตามหาน้องเรียกชู้            เห็นแต่หมู่ไม้ไพรไสว
-ป่าพงเงียบเหงาเศร้าใจแท้      อกพี่จะแหลกแล้งไฉน
-แสนรักแสนหวงดวงใจ          ถูกพรากไปกลางไพรพง`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พระรามโศกเมื่อนางสีดาถูกลักพาตัว” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องเศร้าหมองเมื่อชายาของตนนั้นโดนลักพาตัวไปเจ้าชะตาอยู่ในช่วงชะตาความรักอาจต้องพานพบอุปสรรคและระยะทางที่กั้นขวาง ดุจสายน้ำพัดพรากให้ห่างไกลจากผู้เป็นที่รัก ด้วยเหตุจำเป็นที่มิอาจเลี่ยง บทพิสูจน์แห่งกาลเวลาจึงทอดยาว ทำให้การกลับมาพบกันอีกคราเป็นสิ่ง ที่ต้องรอคอย ในห้วงเวลาที่เหลืออยู่เคียงข้าง จงเห็นค่าทุกลมหายใจ ใช้ความเข้าใจ ความอ่อนโยน และความอบอุ่นเป็นดังแสงไฟเล็ก ๆ ที่ประคองความสัมพันธ์ให้มั่นคง แม้ระยะทางหรือเวลาอาจพรากกาย แต่ใจที่ผูกพันจะยังคง ส่องนำทาง จนกว่าจะถึงวันที่ฟ้ากำหนดให้กลับมาพบพานอีกครั้ง`,note:`(รามเกียรติ, 2515 : 217)`},
-  5:{series:"",verse:`ฝ่ายพิเภกจอมอสุรีย์ศรีลงกา        ได้ราชาครองเมืองดังปรารถนา
-ทวยขุนนางหมู่อสุราพากันมา        ถวายวาจาสรรเสริญไม่เว้นวัน
-บ้างมอบของกำนัลหวังลาภยศ       บ้างเอ่ยถ้อยประจบด้วยสีหน้าสุขสันต์
-แต่ใจแฝงหวังเพียงผลแห่งตนพลัน   มิเคยมั่นต่อสัตย์หรือซื่อใจ`,meaning:`เซียมซีใบนี้ได้ตอนที่ “ภิเพกขึ้นครองกรุงลงกา” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับภิเพกที่ได้ปกครองกรุงลงกาแทนพญายักษ์ทศกัณฑ์เจ้าชะตาอยู่ในช่วงดวงชะตาอยู่ในเกณฑ์อันราบรื่น มีโอกาสได้สัมผัสความสำเร็จและความสมหวังในหลายด้านเส้นทางเบื้องหน้าดูแจ่มชัดและสงบเย็น ทว่าก็มิได้ไร้เงาแห่งบททดสอบ เพราะอาจมีผู้เข้ามาแสดงความหวังดีเพียงเพื่อแสวงหาผลอันช่อนเร้น บางครั้งอาจเป็นคนใกล้ชิด หรือผู้ที่ใจไว้วางแล้ว ดังนั้น ชีวิตจึงควรดำเนินไปด้วยสติและความรอบคอบ ทุกการตัดสินใจควรผ่านการพิจารณาให้รอบด้าน เพื่อมิให้ตกอยู่ในเงื่อนไขแห่งการเอารัดเอาเปรียบ หากสามารถดำรงใจมั่นคงได้ ความร่มเย็นและความมั่นคงก็จักยั่งยืนดังเดิม`,note:`(รามเกียรติ์, 2515 : 131)`},
-  6:{series:"",verse:`เมื่อนั้นพระจักรีศรีสวัสดิ์             ได้ชัยชนะดั่งใจหมายสมบัติ
-เทวดามอบพรอำนวยอภิวัฒน์        ประกาศฤทธิ์เกริกเกียรติ์เกรียงไกร
-ได้แก้วแหวนของทิพย์มาประสิทธิ์   เพิ่มฤทธิ์เพิ่มเดชเกรียงไกร
-กองทัพยักษ์พ่ายแพ้แตกไป           บันดาลให้สมบูรณ์พูนสุข`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พระรามได้รับพรและของวิเศษ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพระรามที่ได้รับพรและของวิเศษเมื่อยามทำศึกกับทศกัณฑ์เจ้าชะตาอยู่ในช่วงดวงชะตาบ่งบอกถึงวาสนา แห่งโชคลาภและความก้าวหน้า เส้นทางข้างหน้ามีแววแห่งความสำเร็จรออยู่ แต่ผลนั้นจะมิได้มาโดยง่าย หากต้องแลกด้วยแรงเพียรและความพยายามที่แท้จริง ความรู้ความสามารถ และความมุ่งมั่นจะเป็นเสมือนเครื่องนำพา ให้ก้าวผ่านอุปสรรคทั้งหลาย แม้เส้นทางจะทอดยาวและกินเวลานาน แต่ทุกก้าวย่างที่ไม่ถอยย่อมพาไปสู่ความสำเร็จอันภาคภูมิ ผลลัพธ์จะงดงามดุจดอกไม้เบ่งบานหลังฤดูฝน และจะเป็นเกียรติยศที่เจ้าของโชคชะตาสร้างขึ้นด้วยมือของตนเอง`,note:`(รามเกียรติ์, 2515 : 132)`},
-  7:{series:"",verse:`ฝ่ายพระรามทรงศรอันศักดิ์สิทธิ์     ยืนประชิดหน้าทัพอสุรี
-ทศกัณฐ์โกรธาอหังการ์พลี             คิดจะล้างชีวีศัตรูเดิม
-ต่างจ้องหน้าเพลิงโชนในแววเนตร    เวรสังเวชสืบเนื่องไม่ขาดเสริม
-เหมือนฟ้าลิขิตไว้แต่แรกเริ่ม           ให้สองเพิ่มศึกใหญ่ในโลกา`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พระรามเผชิญศึกทศกัณฑ์” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องทำศึกกับทศกัณฑ์เพื่อพานางสีดากลับคืนสู่อ้อมอกตนเจ้าชะตาอยู่ในช่วงชะตาชีวิตอาจต้องประสบกับเงาแห่งทุกข์โศก คล้ายมีแรงกรรมเก่าคอยเกาะเกี่ยว ทำให้ใจไม่อาจหยุดนิ่งอยู่ในความสงบสุขได้ดั่งปรารถนา เส้นทางที่ก้าวเดินจึงแฝงด้วยแรงกดดันและบททดสอบที่มิอาจหลีกเลี่ยง กระนั้นหนทางแห่งการคลายทุกข์ก็มิได้ถูกปิดกั้น หากผู้เสี่ยงทายหมั่นเพียรสร้างบุญ สั่งสมความดี แบ่งปัน ด้วยการให้ทาน และแผ่เมตตาไปยังสรรพชีวิต ความร้อนรุ่มในใจจะค่อย ๆ บรรเทา ดุจสายน้ำชำระฝุ่นหม่นให้จางหาย เมื่อใจสงบเย็น ชีวิตก็จักค่อย ๆ คลี่คลายและราบรื่น นำพาความสุขสงบมาสู่ระยะยาว`,note:`(รามเกียรติ์, 2515 : 147)`},
-  8:{series:"",verse:`ครานั้นนางเกสรมารศรี                  มาตำหนักพระบุตรีเสนหา
-ชลนัยน์ไหลหลั่งลงถั่งตา                 สวมกอดพระธิดาเเล้วร่ำไร
-โอ้ว่าสร้อยทองของเเม่อา                พระบิดาจะให้ไปเมืองใต้
-อีกสามวันขวัญเจ้าจะจากไป            เหมือนดังใจเเม่จะขาดอนาถนัก`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางเกสรครวญ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนักเปรียบได้ดั่งนางเกสรที่ต้องพลัดพรากจากลูก อาจต้องพบเจอกับอุปสรรคและปัญหาบางประการจะต้องมีการจากลาหรือพลัดพรากจากถิ่นที่อยู่หรือหากเป็นเรื่องของความรักความสัมพันธ์จะมีการเปลี่ยนแปลงหรือต้องพลัดพรากกัน ท่านต้องเตรียม ใจรับการเปลี่ยนแปลง และรักษาสติให้มันคง และทำใจยอมรับความเปลี่ยนแปลงเพื่อให้ได้สิ่งใหม่ที่ดีขึ้นในอนาคต`,note:`(ขุนช้างขุนแผน, 2544 : 4)`},
-  9:{series:"",verse:`ครานั้นพระองค์ผู้ทรงเดช                    ทอดพระเนตรพ่อลูกก็หรรษา
-จึงมีสีหนาทประภาษมา                      ดูราขุนเเผนกับพลายงาม
-มิเสียแรงเป็นชายชาติทหาร                 ชำนิชำนาญชาญชัยในสนาม
-ครั้งนี้กูใช้ไปสงคราม                          มีไพร่ไปเเต่ตามสิบห้าคน
-เมืองเชียงใหม่ไพร่ฟ้าก็กว่าเเสน             ไปไล่เเล่นลุยลาวเอาแหลกป่น
-ข้าศึกฮึกหาญไม่ทานทน                      ได้คนคืนเมืองเพราะมือมึง
-เซียมชีใบนี้ได้ตอนที่ “ขุนแผนพลายงามเข้าเฝ้า” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งขุนแผนและพลายงามชนะสงคราม อาจได้รับงานที่มีเกียรติหรือเป็นงานสำคัญจากผู้ใหญ่ที่เมตตา ส่งผลให้อาจได้รับรางวัลจากงานหากมีโอกาสเข้ามาควรรับไว้ ใช้ความสามารถของตนในทางที่ดี ไม่ประมาทแม้จะได้เปรียบควรมีความรับผิดชอบและชื่อสัตย์ในงานที่ได้รับและไม่หลงในความสำเร็จ`,meaning:``,note:`(ขุนช้างขุนแผน, 2544 : 162)`},
-  10:{series:"",verse:`พระเจ้าเชียงใหม่ฟื้นตื่นนิทรา        ลุกผวาหวั่นหวาดพระทัยไหว
-ก็ทราบว่าผีบ้านย่านผีไพร            อยู่ไม่ได้หนีออกนอกบุรี
-แสนวิตกกอกเมืองจะเคืองเข็ญ       ต้องยากเย็นผู้คนจะป่นปี้
-นี่เพราะกูทำความไม่งามดี            ไปชักให้ไพรีมีขึ้นมา`,meaning:`เซียมซีใบนี้ได้ตอนที่เกิดวิปริตในเมืองเชียงใหม่ เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนัก เปรียบได้ดั่งพระเจ้าเชียงใหม่ที่ฝันร้ายอาจจะมีผู้คิดร้ายหรือหรือผู้ที่ไม่หวังดี เพราะท่านอาจไปทำให้เขาไม่พอใจ แล้วผู้ที่คิดร้ายจะทำให้ท่านหรือคน ในครอบครัวเดือดร้อนไปด้วย ให้ระมัดระวังคนรอบตัว หรือคนที่ไม่ไว้วางใจ หลีกเลี่ยงการทะเลาะวิวาท และ หากทำสิ่งใด ที่ไม่ถูกต้องควรแก้ไขปัญหาเพื่อป้องกันเหตุที่จะเกิดขึ้น อย่างไรก็ตามท่านจะผ่านพ้นปัญหาและอุปสรรคนี้ไปได้หากมีสติและไม่ประมาทในการใช้ชีวิต`,note:`(ขุนช้างขุนแผน, 2544 : 120)`},
-  11:{series:"",verse:`ครานั้นโฉมเจ้าพลายแก้ว                   ท่านผู้ใหญ่ไปแล้วยิ่งผ่องใส
-กระหยิ่มยิ้มด้วยเจ้าพิมพิลาไลย            เข้านั่งแนบแอบใกล้แล้วกล่าววอน
-ร้อยชั่งนั่งนิ่งเสียไยเล่า                        ขอเชิญเจ้าร่วมมุ่งเสมอหมอน
-ร้อนฤๅจะกระพือให้พิมนอน                 พี่อยู่ก่อนคอยเจ้าถึงสามวัน`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางศรีประจันส่งตัวนางพิม” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งพลายแก้วที่กำลังพัฒนาความสัมพันธ์กับนางพิม มีโอกาสได้เข้าไปใกล้ชิดกับคนที่รักมากขึ้นหรืออาจมีความสัมพันธ์ที่ลึกซึ้งขึ้น จะมีคนเข้ามาในชีวิตของท่านหรือคนรักของท่านจะเข้ามาใกล้ชิดและแสดงความร้สึกทีอ่อนโยน อบอุ่น และจริงใจ ทำให้ท่านรู้สึกสบายใจและมีความสุขในความสัมพันธ์ คนรักของท่านอาจต้องการความสัมพันธ์ที่จริงจังและใกล้ชิดมากขึ้น มีการเชื้อเชิญให้ท่านเข้ามา ใช้ชีวิตร่วมกันหรือสร้างครอบครัว การตัดสินใจของท่านอาจใช้เวลาไม่นานนัก หรือมีโอกาสดีๆ ในเรื่องความรักเข้ามาการใช้เวลาทำความรู้จักกันมากขึ้นจะช่วยสร้างรากฐานที่แข็งแกร่งกับคนที่รัก (ขุนช้างขุนแผน, 2544 : 138)`,note:``},
-  12:{series:"",verse:`ศรีมาลาอาวรณ์นอนใจตรอม                         ถนอมเเนบหมอนข้างเคียงคะนึง
-โอ้พ่อพลายงามของน้องเอ๋ย                          ใครเลยจะเอ็นดูให้รู้ถึง
-ว่าน้องนี้มีจิตคิดรำพึง                                  ดังศรตรึงทรวงโศกวิโยคคิด
-พ่อชายตามาสบเมื่อน้องเเล                           จะรู้เเน่ฤาจะเเหนงเเคลงในจิต
-ดูลาดเลาเจ้าก็ใคร่จะเป็นมิตร                         ฤาวิปริตคิดว่าไม่ปรานี
-อกน้องยากนักด้วยเป็นหญิง                           ต้องซ่อนรักหนักนิ่งอยู่กับที่`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางศรีมาลาครวญถึงพลายงาม” เกณฑ์ชะตาของผู้เสี่ยงทายอาจไม่ดีนักเปรียบได้ดั่งนางนางศรีมาลาที่เฝ้าแต่ห่วงหาพลายงาม ผู้ที่ได้ใบเซียมซีใบนี้อยู่ในช่วงที่กำลังคิดถึงคนรักหรือคนที่คุณชอบ แต่ไม่กล้าแสดงออกอย่างเปิดเผย ทำให้ความ รักหรือความรู้สึกนั้นค้างคาอยู่ในใจจนทำให้เป็นทุกข์หากท่านมีความรู้สึกดี ๆ ให้ใครสักคน อย่าเก็บไว้เพียงลำพัง ลองหาโอกาสบอกความรู้สึกอย่างจริงใจให้เขาได้รู้แต่อย่าคาดหวังมากเกินไป`,note:`(ขุนช้างขุนแผน, 2544 : 60)`},
-  13:{series:"",verse:`ขันหมากตั้งเคียงเรียงกันมา                       เฒ่าแก่นำหน้าขึ้นนั่งพรม
-เฒ่าแก่ที่เรือนก็ต้อนรับ                            จึงนับโต๊ะเตียบใหญ่ใส่ขนม
-ทั้งหมูไก่เหล้าเข้มเต็มขวดกลม                    กล้วยส้มร้อยสิ่งตามสัญญา
-ทุกสินเงินตราผ้าไหว้                                เอาออกนับรับใส่โต๊ะสามขา
-เฒ่าแก่สองข้างต่างสนทนา                         ขนของเข้าเคหาด้วยทันใด`,meaning:`เซียมซีใบนี้ได้ตอนที่ “แต่งงานขุนช้างกับนางวันทอง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งนางวันทองที่ได้รับทรัพย์สินต่างๆที่เป็นสินสอดอยู่ในช่วงกำลังจะมีโชคลาภเข้ามาอย่างต่อเนื่องหรือมีผู้ใหญ่ให้การสนับสนุนและหยิบยืนโอกาสดีๆ ให้จะมีความอุดมสมบูรณ์ในเรื่องการเงิน มีรายได้เข้ามาอย่างเต็มที่และมาจากหลายทาง มีความมั่งคั่งร่ำรวย หากเป็นเรื่องความรักอาจมีโอกาสได้เจอกับเนื้อคู่หรือความรักดีๆแม้จะมีโชคลาภเข้ามามาก แต่ก็ไม่ควรประมาท ควรจัดการรายรับรายจ่ายให้ดี และเก็บออมไว้บ้างเพื่อความมั่นคงในระยะยาว เรื่องความรักต้องรักอย่างมีสติและดูแลคนรักให้ดี`,note:`(ขุนช้างขุนแผน, 2544 : 221)`},
-  14:{series:"",verse:`ถามหมอลางหมอว่าไม่ตาย                    ลางหมอก็ว่าร้ายเห็นไม่ได้
-บ้างก็ว่าลมบาดทะยักชักหัวใจ                บ้างก็ว่าไข้เพื่อเลือดระดูทำ
-บ้างว่าผีเรือนวิ่งเข้าออก                       ศรีประจันตากลอกไม่เป็นส่ำ
-มดหมอตะแกด่าว่าระยำ                      มานั่งกินพร่ำพร่ำสบายใจ
-คนเจ็บร้องเสียงเหมือนวัวมอ                 อ้ายหมอนั่งหัวร่อหาดูไม่
-จะให้มันรักษาไปว่าไร                         ไสหัวให้ไปพ้นเรือนกู`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางพิมเจ็บ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนักเปรียบได้ดั่งนางพิมที่มีอาการเจ็บป่วยอาจมีอาการเจ็บป่วย แต่ไม่ร้ายแรงถึงชีวิตอาการเจ็บป่วยอาจเกิดจากภาวะเครียด หรือความกังวล ที่มีสาเหตุไม่แน่ชัดหรืออาจเป็นอาการทางใจหากไปหาหมอแผน โบราณ อาจไม่สามารถรักษาได้ตรงจุดอาการเจ็บป่วยอาจทำให้รู้สึกทรมานและทุกข์ใจควรดูแลสุขภาพกายและใจ รวมถึงการเลือกวิธีการรักษาที่เหมาะสม หากทำตามคำแนะนำแล้ว สุขภาพจะดีขึ้น ในไม่ช้า`,note:`(ขุนช้างขุนแผน, 2544 : 193)`},
-  15:{series:"",verse:`เมื่อนั้น                                        องค์ท้าวทศพักตร์ยักษา
-อยู่ยังยอดเขาสัตนา                         ทอดพระเนตรลงกาธานี
-ครั้นเห็นไฟไหม้เมืองหมดสิ้น               อสุรินทร์ตรึกตรองหมองศรี
-กูเสียรู้ลิงป่าพนาลี                           เสียบุรีราษฎรก็ร้อนใจ
-จำจะวานเทวาลงมาสร้าง                  ให้กว้างขวางรุ่งเรืองเป็นเมืองใหม่`,meaning:`เซียมซีใบนี้ได้ตอนที่ “ทศกัณฐ์เสียรู้หนุมานเผาเมือง” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์กลาง เปรียบดั่งทศกัณฐ์ผู้แม้ยิ่งใหญ่แต่ยังพลาดพลั้งเพราะความประมาท ธุรกิจการงานในช่วงนี้อาจเผชิญปัญหา ความผิดพลาดบางอย่างเกิดจากสิ่งเล็กน้อยที่ถูกมองข้าม หากลงทุนหรือตัดสินใจครั้งสำคัญอาจเสี่ยงขาดทุนหรือเสียเปรียบได้ อย่างไรก็ดีแม้จะต้องประสบความสูญเสียจงอย่าท้อถอย เพราะเมื่อกล้ายอมรับความผิดพลาดและเรียนรู้จากประสบการณ์ ท่านจะค้นพบหนทางใหม่ให้ก้าวเดินต่อไป ดังเช่นทศกัณฐ์ที่แม้เสียเมืองลง ก็ยังคิดสร้างนครขึ้นใหม่ให้รุ่งเรืองกว่าเดิม วิกฤตครั้งนี้อาจกลับกลายเป็นโอกาส นำพาพันธมิตรหรือผู้เกื้อกูลเข้ามาช่วยประคับประคองกิจการของท่าน ให้กลับมาตั้งมั่นและเจริญรุ่งเรืองได้อีกครา`,note:`(บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 52)`},
-  16:{series:"",verse:`เมื่อนั้น                                             พิเภกรับสั่งบังคมไหว้
-พิเคราะห์ดูก็ว่าจะเกิดภัย                        ตกใจทูลความตามสัจจา
-ซึ่งแร้งเผือกชนะคือพระราม                     จะหยาบหยามย่ำยียักษา
-แร้งดำคือพระองค์ทรงศักดา                     จะอัปราพ่ายแพ้แก่ไพรี
-อันกะลาที่ไฟไหม้หมด                            จะเสียองค์ทรงยศแลกรุงศรี`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พิเภกทำนายฝันทศกัณฐ์” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ไม่ดี เปรียบดังทศกัณฐ์ผู้ได้ฟังคำทำนายแล้วหัวใจสั่นไหว เพราะแร้งเผือกคือพระรามจะได้ชัย ส่วนแร้งดำคือพระองค์จักพ่าย การงานของท่านในช่วงนี้อาจเผชิญศัตรูหรือคู่แข่งที่มีพลังและความสามารถเหนือกว่า หากเผลอประมาทหรือมั่นใจตนเกินไป ย่อมเสี่ยงต่อการพ่ายแพ้หรือเสียตำแหน่งได้ ธุรกิจและการลงทุนก็มิพ้นจะพบช่องโหว่และข้อบกพร่อง ซึ่งอาจนำไปสู่ความเสียหาย จงดำเนินชีวิตด้วยความรอบคอบ ฟังคำเตือนจากผู้อื่น ใช้จ่ายอย่างพอประมาณ และเตรียมรับมือกับทุกเหตุการณ์ แม้ภัยจะคืบคลานเข้ามา แต่หากท่านไม่ประมาท ก็ยังสามารถรักษาตนและกิจการให้อยู่รอดพ้นเคราะห์กรรมได้`,note:`(บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 64)`},
-  17:{series:"",verse:`ครั้นหนึ่งจึงยื่นพระหัตถ์ขวา                 อันมีจักรลักขณาประภัสสร
-งามดังงวงเทวกุญชร                          พระสี่กรจับคันศิลป์ชัย
-อันมหาธนูสิทธิศักดิ์                           จะหนักพระหัตถ์ก็หาไม่
-ยกขึ้นได้คล่องว่องไว                          ภูวไนยกวัดแกว่งสำแดงฤทธิ์`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พระรามยกศรโมลี” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบประหนึ่งพระรามผู้ยกมหาธนูแห่งพระนารายณ์ได้สำเร็จ หน้าที่การงานของท่านในระยะนี้จะนำพาโชคลาภและความสำเร็จมาสู่ แม้งานที่ได้รับดูหนักหน่วงและท้าทายดุจศรศักดิ์สิทธิ์อันไม่มีผู้ใดยกได้ แต่ด้วยความสามารถ ความเพียรพยายามและความมั่นใจในตนเอง ท่านจะผ่านพ้นอุปสรรคและประสบผลสำเร็จโดยง่าย ความสำเร็จครั้งนี้จะก่อให้เกิดลาภผลและทรัพย์สินเงินทอง อันเป็นผลแห่งความตั้งใจแน่วแน่ จงใช้สติปัญญาและความสามารถให้ครบถ้วน อย่าประมาท และเมื่อได้ลาภผลแล้วควรรู้จักเก็บออม มิให้ใช้จ่ายฟุ่มเฟือย เพื่อให้ความเจริญรุ่งเรืองยั่งยืนมั่นคงสืบไป                                                    (รามเกียรติ์ร้อยแก้วประกอบคำกลอน, 2561 : 109)`,note:``},
-  18:{series:"",verse:`เมื่อนั้น                                        พระสุริย์วงศ์ทรงภพแผ่นดินไหว
-ครั้นถึงแก้วแววไว                            ประทับไว้แล้วสั่งเสนา
-อันหมู่วานรทวยหาญ                        ให้อยู่อุทยานฝ่ายขวา
-ส่วนซ้ายนั้นพวกอสุรา                       พรานป่าให้อยู่ธานี`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พระสุริย์วงศ์แบ่งทัพ” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังพระสุริย์วงศ์ผู้จัดทัพให้วานรและอสุราประจำที่อย่างเป็นระเบียบ ท่านมีมิตรสหายคอยเกื้อหนุนอยู่เคียงข้าง อีกทั้งยังมีผู้ใหญ่คอยชี้นำแนะแนว แม้ชีวิตและการงานจะเต็มไปด้วยอุปสรรค แต่ท่านจะไม่ต้องเผชิญเพียงลำพัง หากรู้จักรักษาน้ำใจเพื่อน และรับฟังคำตักเตือนด้วยความเคารพ ปัญหาที่ดูหนักก็จะคลี่คลายไปได้อย่างมั่นคง หนทางชีวิตของท่านจะดำเนินไปอย่างราบรื่น พร้อมทั้งก่อให้เกิดความสัมพันธ์ที่ดีมั่นคง ทั้งในมิตรภาพ การทำงาน และครอบครัว ซึ่งจะเป็นพลังหนุนเสริมให้ก้าวไกลและยั่งยืน`,note:`(รามเกียรติ์ร้อยแก้วประกอบคำกลอน, 2561 : 422)`},
-  19:{series:"",verse:`เมื่อนั้น                                       พิเภกประณตบทศรี
-แล้วว่าข้าเซซังมาครั้งนี้                     ด้วยภักดีต่อพระองค์ทรงศักดา
-มิได้คิดกลับกลอกยอกย้อน                จะหนีร้อนพึ่งเย็นอยู่เป็นข้า
-มาตรแม้นทรงธรรม์ไม่กรุณา               น่าที่ชีวาจะบรรลัย`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พิเภกไปอยู่กับพระราม” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์กลาง เปรียบดังพิเภกผู้ยืนหยัดในความซื่อสัตย์ แม้ต้องพลัดจากวงศ์ตระกูลก็ยังเลือกข้างความถูกต้อง ท่านอาจเผชิญอุปสรรคหรือความเข้าใจผิดในหน้าที่การงาน แต่หากตั้งมั่นในความดีงามและไม่คิดกลับกลอก ความซื่อสัตย์ของท่านจะเป็นเกราะป้องกันและนำไปสู่ผลลัพธ์ที่ดีกว่า ผู้คนที่มองเห็นคุณค่าและความจริงใจของท่านจะยื่นมือเข้ามาช่วยเหลือ เพียงยึดมั่นในความซื่อสัตย์ ไม่คิดเอาเปรียบหรือทรยศผู้อื่น ความตั้งใจมั่นนี้จะนำพามาซึ่งความมั่นคง เกียรติยศ และความเคารพนับถือในชีวิตและการงานของท่าน`,note:`(บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 70)`},
-  20:{series:"",verse:`เมื่อนั้น                                        องค์พระหริรักษ์เรืองศรี
-เห็นนางสีดานารี                             ลุยอัคคีไม่พองเท่าย่องใย
-พระชื่นชมสมจิตคิดถวิล                    มิได้มีมลทินสิ้นสงสัย
-มากุมกรกัลยาคลาไคล                     ขึ้นไปบนสุวรรณพลับพลา`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางสีดาลุยไฟ” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังนางสีดาผู้ก้าวผ่านเปลวเพลิงเพื่อพิสูจน์ความบริสุทธิ์แห่งรัก ความรักของท่านอาจถูกทดสอบด้วยอุปสรรค ความเข้าใจผิด หรือความเคลือบแคลงใจ แต่หากยึดมั่นในความจริงใจและความซื่อสัตย์ดุจดังนางสีดาที่ไม่หวั่นไหวต่อเปลวเพลิง ความรักนั้นย่อมผ่านพ้นทุกข้อสงสัยไปได้ เมื่อความศรัทธาและความเชื่อใจได้รับการพิสูจน์แล้ว ความรักของท่านจะกลับมาสดใส มั่นคง และงดงามกว่าเดิม เปรียบดังเพลิงที่เผาผลาญความเคลือบแคลง จนเหลือไว้เพียงความผูกพันอันบริสุทธิ์และมั่นคงยืนนาน`,note:`(บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 522)`},
-  21:{series:"",verse:`บัดนั้น                                        พิเภกทูลแจ้งแถลงไข
-พระอนุชาวานรพลไกร                     สลบไปด้วยฤทธิ์พิษนาคี
-จงแผลงศรเป็นครุฑราช                    ให้สังหารนาคบาศยักษี
-พระอนุชาจะฟื้นคืนชีวี                     ทั้งกระบี่รี้พลสกลไกร`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พระรามแผลงศรครุฑราชแก้พระลักษมณ์และไพร่พล” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังพระลักษมณ์และเหล่าทัพที่แม้ถูกนาคบาศพันธนาการ ก็ยังได้ฟื้นคืนชีวีด้วยอานุภาพแห่งศรครุฑราช สุขภาพของท่านอาจอยู่ในช่วงอ่อนแอหรือมีอาการเจ็บป่วย จึงจำเป็นต้องใส่ใจและดูแลร่างกายให้มากขึ้น แต่เช่นเดียวกับพิเภกผู้ทูลแจ้งจนพระรามแก้สถานการณ์ได้สำเร็จ ท่านก็จะได้รับความช่วยเหลือจากมิตรสหายหรือผู้รู้ที่คอยให้คำแนะนำ พาไปพบแพทย์ หรืออยู่เคียงข้างเพื่อให้กำลังใจ ด้วยการดูแลรักษาอย่างถูกวิธี และการได้รับความช่วยเหลือทันท่วงที ร่างกายของท่านจะฟื้นตัวกลับมาแข็งแรง สุขภาพจะค่อย ๆ ดีขึ้น และกลับคืนสู่สมดุลดังเดิม`,note:`(บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 221)`},
-  22:{series:"",verse:`ครานั้นพระองค์ได้ทรงฟัง                          จึงดำรัสตรัสสั่งพระหมื่นศรี
-ประทานของต้องตามความชอบมี                เจียดกระบี่เสื้อใส่ได้ประทาน
-ตัวอ้ายพลายให้ตั้งเป็นขุนแผน                    อยู่รักษาเขตแดนที่ปลายด่าน
-คุมไพร่ห้าร้อยคอยเหตุการณ์                     แล้วประทานเรือยาวเก้าวา`,meaning:`เซียมซีใบนี้ได้ตอนที่ “พลายแก้วได้เป็นขุนแผน’’ เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพลายแก้วในตอนที่ได้รับพระราชทานยศให้เป็นขุนแผน เจ้าชะตากำลังอยู่ในช่วงดวงชะตาจะรุ่งเรือง ได้รับการยกย่องและความไว้วางใจจากผู้ใหญ่ให้รับภารกิจสำคัญที่มาพร้อมกับตำแหน่ง อำนาจ และบทบาทใหม่ซึ่งแม้อาจเต็มไปด้วยความรับผิดชอบที่หนักหนาในช่วงเริ่มต้นแต่ขอให้มั่นใจว่านั่นคือบันไดขั้นสำคัญที่จะนำพาไปสู่ความสำเร็จและความมั่นคงในภายภาคหน้าจงตั้งมั่นในความดี ซื่อสัตย์ต่อหน้าที่ ไม่ย่อท้อต่ออุปสรรค แล้วความเจริญรุ่งเรืองโอกาสดี ๆ และความสำเร็จจะหลั่งไหลเข้ามาอย่างต่อเนื่องไม่ขาดสาย`,note:`(ขุนช้างขุนแผน, 2544 : 288)`},
-  23:{series:"",verse:`ว่านวลนางศรีมาลา                                   คืนวันนั้นนิทราก็ใฝ่ฝัน
-ว่าลงสระเล่นน้ำสำราญครัน                         เห็นบุษบันดอกหนึ่งดูพึงตา
-ผุดขึ้นพันน้ำงามสะอาด                              นางโผนผาดออกไปด้วยหรรษา
-เด็ดได้ดีใจว่ายกลับมา                                กอดแนบแอบอุราประคองดม`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางศรีมาลาฝัน” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ นางศรีมาลาฝันว่าได้เด็ดดอกบัวมาครอบครอง เป็นนิมิตหมายถึงความรักแท้ และโอกาสดี ๆ ที่กำลังจะเข้ามาไม่เพียงเรื่องหัวใจ หากยังรวมถึงความสำเร็จในหน้าที่หรือการได้รับโอกาสจากผู้ใหญ่ที่มองเห็นศักยภาพจงเปิดใจ รับสิ่งดี ๆ ที่กำลังจะปรากฏ อย่ากลัวที่จะแสดงความสามารถและจงกล้าคว้าโอกาสนั้นไว้ เพราะเบื้องหน้าคือเส้นทางแห่งความรัก ความสำเร็จ และความสุขอย่างแท้จริง`,note:`(ขุนช้างขุนแผน, 2544 : 55)`},
-  24:{series:"",verse:`ครานั้นสมเด็จพระพันวษา                           ตรัสเรียกโหราเข้ามาสั่ง
-ให้คูณหารฤกษ์ยามตามกำลัง                       วันไรจะตั้งให้ยาตรา
-พระโหราหาฤกษ์แล้วทูลพลัน                       ขึ้นเจ็ดค่ำนั้นเป็นเศษห้า
-ได้ฤกษ์เบิกพยุหเสนา                                 เวลาสี่โมงเช้าเก้านาที
-ปลอดทั้งผีหลวงห่วงวัน                              ยามนั้นได้เมื่อพระฤาษี
-แค้นขัดมัดมือลิงกาลิ                                 จะไปตีบ้านเมืองย่อมมีชัยมี`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางทองประศรีเข้ามาอยู่กรุง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ พระพันวษาช่วงที่พลังดีมีชัยอยู่ในช่วงเวลาอันเป็นมงคล เป็นจังหวะที่เหมาะสมสำหรับการเริ่มต้น หรือเดินหน้าต่อในสิ่งที่ตั้งใจไว้ ขอเพียงเปิดใจรับฟังคำแนะนำจากผู้มีประสบการณ์ และดำเนินการอย่างเป็นลำดับขั้นตอน ความสำเร็จก็จะอยู่ไม่ไกลเกินเอื้อม หากมีเรื่องต้องตัดสินใจในเวลานี้ให้เลือกในทางที่ทำให้ใจสงบและสบายใจที่สุดเพราะไม่ว่าทางใด ก็ล้วนเป็นเส้นทางที่จะพาไปสู่ความสำเร็จได้ทั้งสิ้นแม้ฤกษ์งามยามดีจะอยู่ตรงหน้าแต่ผลลัพธ์จะงดงามได้ ต้องอาศัยความพยายามและความตั้งใจจริงเป็นเครื่องนำทาง`,note:`(ขุนช้างขุนแผน, 2544 : 44)`},
-  25:{series:"",verse:`จะกล่าวถึงเจ้าจอมหม่อมขุนช้าง                     นอนครางอยู่ในห้องให้หมองศรี
-แต่วันทองจากไปได้เกือบปี                            ไม่มีเพื่อนนอนสะท้อนทุกข์
-มิได้นอนค่อนคืนตื่นสะดุ้ง                             ใกล้รุ่งก่อนไก่ไม่พักปลุก
-กระทั่งถูกฟูกหมอนเหมือนไฟลุก                     แต่เวียนจุกประจุบันทุกวันคืน`,meaning:`เซียมซีใบนี้ได้ตอนที่ “สมเด็จพระพันวษาทรงให้ชำระความ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับขุนช้างผู้ยังผูกพันแน่นแฟ้นกับความรักที่ล่วงเลย แม้วันเวลาจะผ่านไปนานเพียงใดใจยังคงโศกถึง วันทอง ผู้เป็นดั่งแสงสว่างในชีวิตความรักที่เคยมีอาจงดงามและมีคุณค่ายิ่ง แต่จงระวังอย่าให้ความโศกเศร้ากลายเป็นพันธนาการที่ฉุดรั้งไม่ให้หัวใจก้าวไปข้างหน้า ขณะนี้อาจเป็นช่วงเวลาที่เปลี่ยวเหงา ขาดที่พึ่งพิงทางใจหรือสิ่งที่เคยยึดเหนี่ยว ทำให้คุณรู้สึกว่างเปล่าและไร้แรงผลักดัน ทว่าในความเจ็บปวดนั้น ยังมีบทเรียนที่งดงามซ่อนอยู่ จงรักตัวเองให้มากพอ ก่อนจะเปิดใจให้ใครอีกครั้งอย่าปล่อยให้หัวใจจมอยู่กับอดีตหรือผู้ที่เดินจากไปแล้วหากช่วงนี้รู้สึกอ้างว้าง ให้ใช้เวลาอยู่กับตัวเอง ทำในสิ่งที่รักเติมเต็มตัวตนจากภายใน แล้ววันหนึ่งแสงสว่างดวงใหม่จะปรากฏขึ้นเอง`,note:`(ขุนช้างขุนแผน, 2544 : 404)`},
-  26:{series:"",verse:`ขุนช้างกำลังเมายืนเกาก้น                               ทุดอ้ายหมาด่าคนเล่นง่ายง่าย
-จองหองจะถองกูฤาอ้ายพลาย                        ฤาเชื่อว่าเป็นนายมหาดเล็ก
-อ้ายชาติอกตัญญูไม่รู้คุณ                                คือใครแคะค่อนขุนมาแต่เด็ก
-ด่าทอพ่อได้อ้ายใจเจ๊ก                                   เมื่อเล็กเล็กใครเลี้ยงมึงเป็นตัว`,meaning:`เซียมซีใบนี้ได้ตอนที่ “ขุนช้างวิวาทกับพระไวย” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับขุนช้างผู้มีบุญคุณต่อพลายงาม เลี้ยงดูทะนุถนอมมาตั้งแต่เยาว์วัย ดุจดั่งสายเลือดของตนเอง หากแต่เมื่อวันเวลาผ่านไป ความผูกพันกลับแปรเปลี่ยนเป็นความขุ่นเคือง หมองหมางด้วยเหตุแห่งใจ ความเข้าใจผิด ความไม่พอใจ หรือความคาดหวังที่ไม่สมดุล กลับกลายเป็นช่องว่างแห่งรอยร้าวในเวลานี้ คุณอาจกำลังเผชิญความขัดแย้งกับผู้ใหญ่ หรือบุคคลที่เคยมีบุญคุณ  อาจรู้สึกไม่เป็นธรรม ถูกมองในแง่ลบ หรือแม้แต่ถูกกล่าวหาว่าอกตัญญู  จงอย่าให้อารมณ์เป็นตัวตัดสินความสัมพันธ์ที่มีค่ามาแต่อดีต หากความรักความผูกพันและความเคารพยังมีอยู่จริงการหันหน้าเข้าหากันอย่างเปิดใจ ย่อมประเสริฐกว่าการหันหลังให้กัน ใช้สติและเหตุผลเป็นหลัก พูดคุยด้วยเมตตา ไตร่ตรองด้วยใจเย็น`,note:`(ขุนช้างขุนแผน, 2544 : 189)`},
-  27:{series:"",verse:`ครั้นถึงวันดีเป็นศรีวัน                   พระญาติวงศ์พร้อมกันถ้วนหน้า
-เจ้าเชียงใหม่ให้นามแก่นัดดา           ให้ชื่อว่าพลายยงพงศ์นพรัฐ
-แล้วประทานข้าไทให้ใช้สอย            เพรชรพลอยเครื่องประดับสำหรับกษัตริย์
-ทั้งเงินทองของเล่นสารพัด              ชมเชยเสวยสวัสดิ์ทุกวันไป`,meaning:`เซียมซีใบนี้ได้ตอนที่ “กำเนิดพลายยงลูกนางสร้อยฟ้า” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ พลายยงผู้มีวาสนาและบริวารคอยสนับสนุนทรัพย์สินและความสุขไหลมาอย่างไม่ขาดสาย ชีวิตเต็มไปด้วยความรื่นรมย์และสมบูรณ์ในทุกย่างก้าว แม้โชคชะตาจะนำพาความสุขสบายมาให้ อย่าประมาทในความเพียรพยายามและความอดทน เพราะนั่นคือกุญแจสำคัญที่จะทำให้ความสำเร็จมั่นคงและยั่งยืน ท่านจะได้รับตำแหน่ง หน้าที่การงาน ชื่อเสียง และการยอมรับจากผู้คนรอบข้าง มีบริวารและผู้สนับสนุนคอยช่วยเหลือ จนชีวิตเปี่ยมด้วยความสะดวกสบายและความสุขในทุกวัน การเคารพและเปิดรับคำแนะนำจากผู้มีประสบการณ์ คือหนทางสู่ปัญญาและความก้าวหน้า เพราะผู้ที่ผ่านร้อนผ่านหนาวมาก่อน จะนำพาโอกาสดี ๆ มาสู่ท่านในเวลาอันเหมาะสม`,note:`(ขุนช้างขุนแผน, 2544 : 379)`},
-  28:{series:"",verse:`ครานั้นศรีประจันผู้แม่เฒ่า       เห็นลูกสาวซูบเศร้าลงหนักหนา
-กลัดกลุ้มคลุ้มคลังไม่ฟังยา       มดหมอหามาก็หลายคน
-หมอจะเอาอะไรให้ทุกสิ่ง        ข้าไทชายหญิงวิ่งสับสน
-วุ่นวายทั้งบ้านแกบานบน        จนใจไม่รู้ว่าเป็นไร`,meaning:`เซียมซีใบนี้ได้ตอนที่ “นางพิมเปลี่ยนชื่อวันทอง ขุนช้างลวงว่าพลายแก้วตาย” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับ นางวันทองผู้เผชิญเคราะห์โรคภัยและความอ่อนแรงทางกายและใจแม้ร่างกายและจิตใจอ่อนล้า แต่ยังคงรับรู้ถึงความห่วงใยและความรักจากคนรอบข้างเสมอ ช่วงเวลานี้เหมือนมีภาระหนักอึ้งอยู่ในใจ แม้พยายามเต็มที่ก็ยังไม่พบหนทางที่ชัดเจน หากเผชิญกับปัญหาด้านสุขภาพ จงอย่าลังเลที่จะขอคำปรึกษาจากผู้รู้ เพื่อสร้างความสบายใจแก่ตนเองและผู้ที่รัก อย่าปิดกั้นตัวเองจากความช่วยเหลือ และเปิดใจแบ่งปันความทุกข์กับคนรอบข้าง เพราะการร่วมแรงร่วมใจกันจะช่วยคลี่คลายปัญหาและพาไปสู่ทางออกที่ดีขึ้น`,note:`(ขุนช้างขุนแผน, 2544 : 192)`},
+// ---------- Data ----------
+const stickNum = sessionStorage.getItem('siemsiStick') || 1;
+document.getElementById('stickNum').textContent = `หมายเลขเซียมซีที่ ${stickNum}`;
+
+const fortunes = {
+        1: {
+      title: "รามเกียรติ์, 2515 : 117",
+      img: "images/r1.png",
+      desc: "เซียมชีใบนี้ได้ตอนที่     “หนุมานได้ฤทธิ์จากพระพรหม” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดีเปรียบได้ดังกับหนุมานในตอนที่ได้รับฤทธิ์เดชจากพระพรหม เจ้าชะตาอยู่ในช่วงมีวาสนา ...",
+      fullText: `เซียมชีใบนี้ได้ตอนที่ “หนุมานได้ฤทธิ์จากพระพรหม” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับหนุมานในตอนที่ได้รับฤทธิ์เดชจากพระพรหม เจ้าชะตาอยู่ในช่วงมีวาสนา ได้รับแรงเกื้อหนุนจากผู้ใหญ่หรือผู้มีบารมีคอยอุปถัมภ์ค้ำชู ดุจร่มเงาแห่งบุญกุศลที่ปกป้องคุ้มครอง เส้นทางที่ก้าวเดินจึงมีแนวโน้มราบรื่นและมั่นคง ทั้งในการงาน การเงิน และสุขภาพกายใจ หากหมั่นเพียรและดำรงความดี ย่อมได้รับการส่งเสริมให้สมหวัง แต่หนทางนี้ก็ยังแฝงด้วยบททดสอบซ่อนอยู่ ผู้เสี่ยงทายจึงควรใช้ปัญญาและความอดทนเป็นเกราะกำบัง จึงจะเห็นผลแห่งความเจริญยั่งยืน`
+    },
+    2: {
+      title: "รามเกียรติ์, 2515 : 174",
+      img: "images/r2.png",
+      desc: "เซียมชีใบนี้ได้ตอนที่ “พระรามได้ครองกรุงอโยธยา” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดีเปรียบได้ดังกับพระรามที่ได้กลับคืนมาปกครองยังกรุงยโยธยา...",
+      fullText: `เซียมชีใบนี้ได้ตอนที่ “พระรามได้ครองกรุงอโยธยา” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพระรามที่ได้กลับคืนมาปกครองยังกรุงอโยธยา บ้านเกิดของตนเจ้าชะตาอยู่ในช่วงมีวาสนาที่จะได้ประสบกับความสงบเย็นภายหลังจากเผชิญความทุกข์ยาก ความเป็นธรรมจะปรากฏดุจแสงที่ขับไล่เงามืด เปิดหนทางใหม่ให้ก้าวเดินไปอย่างมั่นคง งดงาม และสมบูรณ์ แม้หนทางข้างหน้าจะยังมีสิ่งเร้นลับซ่อนอยู่ แต่ก็เปี่ยมด้วยโอกาสและความหมาย ผู้ที่เพียรมั่นในคุณธรรมและไม่หวั่นต่อบททดสอบ ย่อมได้พบความร่มเย็นอันคู่ควรแก่ชะตาชีวิต`
+    },
+    3: {
+      title: "รามเกียรติ์, 2515 : 294",
+      img: "images/r3.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ ”พระรามเสด็จออกจากเมือง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องเสด็จออกจากเมืองไปอยู่ในป่า...",
+      fullText: `ครานั้นองค์พระรามทรงศักดิ์... (คำทำนายเต็ม)`
+    },
+    4: {
+      title: "รามเกียรติ, 2515 : 217",
+      img: "images/r4.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พระรามโศกเมื่อนางสีดาถูกลักพาตัว” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องเศร้าหมองเมื่อชายาของตนนั้นโดนลักพาตัวไปเจ้าชะตาอยู่ในช่วงชะตาความรักอาจต้องพานพบอุปสรรคและระยะทางที่กั้นขวาง...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พระรามโศกเมื่อนางสีดาถูกลักพาตัว” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องเศร้าหมองเมื่อชายาของตนนั้นโดนลักพาตัวไปเจ้าชะตาอยู่ในช่วงชะตาความรักอาจต้องพานพบอุปสรรคและระยะทางที่กั้นขวาง ดุจสายน้ำพัดพรากให้ห่างไกลจากผู้เป็นที่รัก ด้วยเหตุจำเป็นที่มิอาจเลี่ยง บทพิสูจน์แห่งกาลเวลาจึงทอดยาว ทำให้การกลับมาพบกันอีกคราเป็นสิ่ง ที่ต้องรอคอย ในห้วงเวลาที่เหลืออยู่เคียงข้าง จงเห็นค่าทุกลมหายใจ ใช้ความเข้าใจ ความอ่อนโยน และความอบอุ่นเป็นดังแสงไฟเล็ก ๆ ที่ประคองความสัมพันธ์ให้มั่นคง แม้ระยะทางหรือเวลาอาจพรากกาย แต่ใจที่ผูกพันจะยังคง ส่องนำทาง จนกว่าจะถึงวันที่ฟ้ากำหนดให้กลับมาพบพานอีกครั้ง`
+    },
+    5: {
+      title: "รามเกียรติ์, 2515 : 131",
+      img: "images/r5.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “ภิเพกขึ้นครองกรุงลงกา” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับภิเพกที่ได้ปกครองกรุงลงกาแทนพญายักษ์ทศกัณฑ์เจ้าชะตาอยู่ในช่วงดวงชะตาอยู่ในเกณฑ์อันราบรื่น...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “ภิเพกขึ้นครองกรุงลงกา” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับภิเพกที่ได้ปกครองกรุงลงกาแทนพญายักษ์ทศกัณฑ์เจ้าชะตาอยู่ในช่วงดวงชะตาอยู่ในเกณฑ์อันราบรื่น มีโอกาสได้สัมผัสความสำเร็จและความสมหวังในหลายด้านเส้นทางเบื้องหน้าดูแจ่มชัดและสงบเย็น ทว่าก็มิได้ไร้เงาแห่งบททดสอบ เพราะอาจมีผู้เข้ามาแสดงความหวังดีเพียงเพื่อแสวงหาผลอันช่อนเร้น บางครั้งอาจเป็นคนใกล้ชิด หรือผู้ที่ใจไว้วางแล้ว ดังนั้น ชีวิตจึงควรดำเนินไปด้วยสติและความรอบคอบ ทุกการตัดสินใจควรผ่านการพิจารณาให้รอบด้าน เพื่อมิให้ตกอยู่ในเงื่อนไขแห่งการเอารัดเอาเปรียบ หากสามารถดำรงใจมั่นคงได้ ความร่มเย็นและความมั่นคงก็จักยั่งยืนดังเดิม`
+    },
+    6: {
+      title: "รามเกียรติ์, 2515 : 132",
+      img: "images/r6.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พระรามได้รับพรและของวิเศษ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพระรามที่ได้รับพรและของวิเศษเมื่อยามทำศึกกับทศกัณฑ์เจ้าชะตาอยู่ในช่วงดวงชะตาบ่งบอกถึงวาสนา แห่งโชคลาภและความก้าวหน้า...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พระรามเผชิญศึกทศกัณฑ์” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องทำศึกกับทศกัณฑ์เพื่อพานางสีดากลับคืนสู่อ้อมอกตนเจ้าชะตาอยู่ในช่วงชะตาชีวิตอาจต้องประสบกับเงาแห่งทุกข์โศก คล้ายมีแรงกรรมเก่าคอยเกาะเกี่ยว ทำให้ใจไม่อาจหยุดนิ่งอยู่ในความสงบสุขได้ดั่งปรารถนา เส้นทางที่ก้าวเดินจึงแฝงด้วยแรงกดดันและบททดสอบที่มิอาจหลีกเลี่ยง กระนั้นหนทางแห่งการคลายทุกข์ก็มิได้ถูกปิดกั้น หากผู้เสี่ยงทายหมั่นเพียรสร้างบุญ สั่งสมความดี แบ่งปัน ด้วยการให้ทาน และแผ่เมตตาไปยังสรรพชีวิต ความร้อนรุ่มในใจจะค่อย ๆ บรรเทา ดุจสายน้ำชำระฝุ่นหม่นให้จางหาย เมื่อใจสงบเย็น ชีวิตก็จักค่อย ๆ คลี่คลายและราบรื่น นำพาความสุขสงบมาสู่ระยะยาว`
+    },
+    7: {
+      title: "รามเกียรติ์, 2515 : 147",
+      img: "images/r7.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พระรามเผชิญศึกทศกัณฑ์” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พระรามเผชิญศึกทศกัณฑ์” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับพระรามที่ต้องทำศึกกับทศกัณฑ์เพื่อพานางสีดากลับคืนสู่อ้อมอกตนเจ้าชะตาอยู่ในช่วงชะตาชีวิตอาจต้องประสบกับเงาแห่งทุกข์โศก คล้ายมีแรงกรรมเก่าคอยเกาะเกี่ยว ทำให้ใจไม่อาจหยุดนิ่งอยู่ในความสงบสุขได้ดั่งปรารถนา เส้นทางที่ก้าวเดินจึงแฝงด้วยแรงกดดันและบททดสอบที่มิอาจหลีกเลี่ยง กระนั้นหนทางแห่งการคลายทุกข์ก็มิได้ถูกปิดกั้น หากผู้เสี่ยงทายหมั่นเพียรสร้างบุญ สั่งสมความดี แบ่งปัน ด้วยการให้ทาน และแผ่เมตตาไปยังสรรพชีวิต ความร้อนรุ่มในใจจะค่อย ๆ บรรเทา ดุจสายน้ำชำระฝุ่นหม่นให้จางหาย เมื่อใจสงบเย็น ชีวิตก็จักค่อย ๆ คลี่คลายและราบรื่น นำพาความสุขสงบมาสู่ระยะยาว`
+    },
+    8: {
+      title: "ขุนช้างขุนแผน, 2544 : 4",
+      img: "images/k8,png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางเกสรครวญ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนักเปรียบได้ดั่งนางเกสรที่ต้องพลัดพรากจากลูก...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางเกสรครวญ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนักเปรียบได้ดั่งนางเกสรที่ต้องพลัดพรากจากลูก อาจต้องพบเจอกับอุปสรรคและปัญหาบางประการจะต้องมีการจากลาหรือพลัดพรากจากถิ่นที่อยู่หรือหากเป็นเรื่องของความรักความสัมพันธ์จะมีการเปลี่ยนแปลงหรือต้องพลัดพรากกัน ท่านต้องเตรียม ใจรับการเปลี่ยนแปลง และรักษาสติให้มันคง และทำใจยอมรับความเปลี่ยนแปลงเพื่อให้ได้สิ่งใหม่ที่ดีขึ้นในอนาคต`
+    },
+    9: {
+      title: "ขุนช้างขุนแผน, 2544 : 162",
+      img: "images/k9.png",
+      desc: "เซียมชีใบนี้ได้ตอนที่ “ขุนแผนพลายงามเข้าเฝ้า” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งขุนแผนและพลายงามชนะสงคราม ...",
+      fullText: `เซียมชีใบนี้ได้ตอนที่ “ขุนแผนพลายงามเข้าเฝ้า” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งขุนแผนและพลายงามชนะสงคราม อาจได้รับงานที่มีเกียรติหรือเป็นงานสำคัญจากผู้ใหญ่ที่เมตตา ส่งผลให้อาจได้รับรางวัลจากงานหากมีโอกาสเข้ามาควรรับไว้ ใช้ความสามารถของตนในทางที่ดี ไม่ประมาทแม้จะได้เปรียบควรมีความรับผิดชอบและชื่อสัตย์ในงานที่ได้รับและไม่หลงในความสำเร็จ`
+    },
+    10: {
+      title: "ขุนช้างขุนแผน, 2544 : 120",
+      img: "images/k10.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่เกิดวิปริตในเมืองเชียงใหม่ เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนัก เปรียบได้ดั่งพระเจ้าเชียงใหม่ที่ฝันร้ายอาจจะมีผู้คิดร้ายหรือหรือผู้ที่ไม่หวังดี เพราะ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่เกิดวิปริตในเมืองเชียงใหม่ เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนัก เปรียบได้ดั่งพระเจ้าเชียงใหม่ที่ฝันร้ายอาจจะมีผู้คิดร้ายหรือหรือผู้ที่ไม่หวังดี เพราะท่านอาจไปทำให้เขาไม่พอใจ แล้วผู้ที่คิดร้ายจะทำให้ท่านหรือคน ในครอบครัวเดือดร้อนไปด้วย ให้ระมัดระวังคนรอบตัว หรือคนที่ไม่ไว้วางใจ หลีกเลี่ยงการทะเลาะวิวาท และ หากทำสิ่งใด ที่ไม่ถูกต้องควรแก้ไขปัญหาเพื่อป้องกันเหตุที่จะเกิดขึ้น อย่างไรก็ตามท่านจะผ่านพ้นปัญหาและอุปสรรคนี้ไปได้หากมีสติและไม่ประมาทในการใช้ชีวิต`
+    },
+    11: {
+      title: "ขุนช้างขุนแผน, 2544 : 138",
+      img: "images/k11.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางศรีประจันส่งตัวนางพิม” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งพลายแก้วที่กำลังพัฒนาความสัมพันธ์กับนางพิม...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางศรีประจันส่งตัวนางพิม” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งพลายแก้วที่กำลังพัฒนาความสัมพันธ์กับนางพิม มีโอกาสได้เข้าไปใกล้ชิดกับคนที่รักมากขึ้นหรืออาจมีความสัมพันธ์ที่ลึกซึ้งขึ้น จะมีคนเข้ามาในชีวิตของท่านหรือคนรักของท่านจะเข้ามาใกล้ชิดและแสดงความร้สึกทีอ่อนโยน อบอุ่น และจริงใจ ทำให้ท่านรู้สึกสบายใจและมีความสุขในความสัมพันธ์ คนรักของท่านอาจต้องการความสัมพันธ์ที่จริงจังและใกล้ชิดมากขึ้น มีการเชื้อเชิญให้ท่านเข้ามา ใช้ชีวิตร่วมกันหรือสร้างครอบครัว การตัดสินใจของท่านอาจใช้เวลาไม่นานนัก หรือมีโอกาสดีๆ ในเรื่องความรักเข้ามาการใช้เวลาทำความรู้จักกันมากขึ้นจะช่วยสร้างรากฐานที่แข็งแกร่งกับคนที่รัก 
+`
+    },
+    12: {
+      title: "ขุนช้างขุนแผน, 2544 : 60",
+      img: "images/k12.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางศรีมาลาครวญถึงพลายงาม” เกณฑ์ชะตาของผู้เสี่ยงทายอาจไม่ดีนักเปรียบได้ดั่งนางนางศรีมาลาที่เฝ้าแต่ห่วงหาพลายงาม...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางศรีมาลาครวญถึงพลายงาม” เกณฑ์ชะตาของผู้เสี่ยงทายอาจไม่ดีนักเปรียบได้ดั่งนางนางศรีมาลาที่เฝ้าแต่ห่วงหาพลายงาม ผู้ที่ได้ใบเซียมซีใบนี้อยู่ในช่วงที่กำลังคิดถึงคนรักหรือคนที่คุณชอบ แต่ไม่กล้าแสดงออกอย่างเปิดเผย ทำให้ความ รักหรือความรู้สึกนั้นค้างคาอยู่ในใจจนทำให้เป็นทุกข์หากท่านมีความรู้สึกดี ๆ ให้ใครสักคน อย่าเก็บไว้เพียงลำพัง ลองหาโอกาสบอกความรู้สึกอย่างจริงใจให้เขาได้รู้แต่อย่าคาดหวังมากเกินไป`
+    },
+    13: {
+      title: "ขุนช้างขุนแผน, 2544 : 221",
+      img: "images/k13.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “แต่งงานขุนช้างกับนางวันทอง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งนางวันทองที่ได้รับทรัพย์สินต่าง...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “แต่งงานขุนช้างกับนางวันทอง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งนางวันทองที่ได้รับทรัพย์สินต่างๆที่เป็นสินสอดอยู่ในช่วงกำลังจะมีโชคลาภเข้ามาอย่างต่อเนื่องหรือมีผู้ใหญ่ให้การสนับสนุนและหยิบยืนโอกาสดีๆ ให้จะมีความอุดมสมบูรณ์ในเรื่องการเงิน มีรายได้เข้ามาอย่างเต็มที่และมาจากหลายทาง มีความมั่งคั่งร่ำรวย หากเป็นเรื่องความรักอาจมีโอกาสได้เจอกับเนื้อคู่หรือความรักดีๆแม้จะมีโชคลาภเข้ามามาก แต่ก็ไม่ควรประมาท ควรจัดการรายรับรายจ่ายให้ดี และเก็บออมไว้บ้างเพื่อความมั่นคงในระยะยาว เรื่องความรักต้องรักอย่างมีสติและดูแลคนรักให้ดี`
+    },
+    13: {
+      title: "ขุนช้างขุนแผน, 2544 : 221",
+      img: "images/k13.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “แต่งงานขุนช้างกับนางวันทอง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งนางวันทองที่ได้รับทรัพย์สินต่าง...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “แต่งงานขุนช้างกับนางวันทอง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ดีเปรียบได้ดั่งนางวันทองที่ได้รับทรัพย์สินต่างๆที่เป็นสินสอดอยู่ในช่วงกำลังจะมีโชคลาภเข้ามาอย่างต่อเนื่องหรือมีผู้ใหญ่ให้การสนับสนุนและหยิบยืนโอกาสดีๆ ให้จะมีความอุดมสมบูรณ์ในเรื่องการเงิน มีรายได้เข้ามาอย่างเต็มที่และมาจากหลายทาง มีความมั่งคั่งร่ำรวย หากเป็นเรื่องความรักอาจมีโอกาสได้เจอกับเนื้อคู่หรือความรักดีๆแม้จะมีโชคลาภเข้ามามาก แต่ก็ไม่ควรประมาท ควรจัดการรายรับรายจ่ายให้ดี และเก็บออมไว้บ้างเพื่อความมั่นคงในระยะยาว เรื่องความรักต้องรักอย่างมีสติและดูแลคนรักให้ดี`
+    },
+    14: {
+      title: "ขุนช้างขุนแผน, 2544 : 193",
+      img: "images/k14.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางพิมเจ็บ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนักเปรียบได้ดั่งนางพิมที่มีอาการเจ็บป่วยอาจมีอาการเจ็บป่วย...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางพิมเจ็บ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ที่ไม่ดีนักเปรียบได้ดั่งนางพิมที่มีอาการเจ็บป่วยอาจมีอาการเจ็บป่วย แต่ไม่ร้ายแรงถึงชีวิตอาการเจ็บป่วยอาจเกิดจากภาวะเครียด หรือความกังวล ที่มีสาเหตุไม่แน่ชัดหรืออาจเป็นอาการทางใจหากไปหาหมอแผน โบราณ อาจไม่สามารถรักษาได้ตรงจุดอาการเจ็บป่วยอาจทำให้รู้สึกทรมานและทุกข์ใจควรดูแลสุขภาพกายและใจ รวมถึงการเลือกวิธีการรักษาที่เหมาะสม หากทำตามคำแนะนำแล้ว สุขภาพจะดีขึ้น ในไม่ช้า`
+    },
+    15: {
+      title: "บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 52",
+      img: "images/r15.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “ทศกัณฐ์เสียรู้หนุมานเผาเมือง” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์กลาง เปรียบดั่งทศกัณฐ์ผู้แม้ยิ่งใหญ่แต่ยังพลาดพลั้งเพราะความประมาท...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “ทศกัณฐ์เสียรู้หนุมานเผาเมือง” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์กลาง เปรียบดั่งทศกัณฐ์ผู้แม้ยิ่งใหญ่แต่ยังพลาดพลั้งเพราะความประมาท ธุรกิจการงานในช่วงนี้อาจเผชิญปัญหา ความผิดพลาดบางอย่างเกิดจากสิ่งเล็กน้อยที่ถูกมองข้าม หากลงทุนหรือตัดสินใจครั้งสำคัญอาจเสี่ยงขาดทุนหรือเสียเปรียบได้ อย่างไรก็ดีแม้จะต้องประสบความสูญเสียจงอย่าท้อถอย เพราะเมื่อกล้ายอมรับความผิดพลาดและเรียนรู้จากประสบการณ์ ท่านจะค้นพบหนทางใหม่ให้ก้าวเดินต่อไป ดังเช่นทศกัณฐ์ที่แม้เสียเมืองลง ก็ยังคิดสร้างนครขึ้นใหม่ให้รุ่งเรืองกว่าเดิม วิกฤตครั้งนี้อาจกลับกลายเป็นโอกาส นำพาพันธมิตรหรือผู้เกื้อกูลเข้ามาช่วยประคับประคองกิจการของท่าน ให้กลับมาตั้งมั่นและเจริญรุ่งเรืองได้อีกครา `
+    },
+    16: {
+      title: "บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 64",
+      img: "images/r16.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พิเภกทำนายฝันทศกัณฐ์” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ไม่ดี เปรียบดังทศกัณฐ์ผู้ได้ฟังคำทำนายแล้วหัวใจสั่นไหว เพราะแร้งเผือกคือพระรามจะได้ชัย ส่วนแร้งดำคือพระองค์จักพ่าย ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พิเภกทำนายฝันทศกัณฐ์” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ไม่ดี เปรียบดังทศกัณฐ์ผู้ได้ฟังคำทำนายแล้วหัวใจสั่นไหว เพราะแร้งเผือกคือพระรามจะได้ชัย ส่วนแร้งดำคือพระองค์จักพ่าย การงานของท่านในช่วงนี้อาจเผชิญศัตรูหรือคู่แข่งที่มีพลังและความสามารถเหนือกว่า หากเผลอประมาทหรือมั่นใจตนเกินไป ย่อมเสี่ยงต่อการพ่ายแพ้หรือเสียตำแหน่งได้ ธุรกิจและการลงทุนก็มิพ้นจะพบช่องโหว่และข้อบกพร่อง ซึ่งอาจนำไปสู่ความเสียหาย จงดำเนินชีวิตด้วยความรอบคอบ ฟังคำเตือนจากผู้อื่น ใช้จ่ายอย่างพอประมาณ และเตรียมรับมือกับทุกเหตุการณ์ แม้ภัยจะคืบคลานเข้ามา แต่หากท่านไม่ประมาท ก็ยังสามารถรักษาตนและกิจการให้อยู่รอดพ้นเคราะห์กรรมได้`
+    },
+    17: {
+      title: "รามเกียรติ์ร้อยแก้วประกอบคำกลอน, 2561 : 109",
+      img: "images/r17.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พระรามยกศรโมลี” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบประหนึ่งพระรามผู้ยกมหาธนูแห่งพระนารายณ์ได้สำเร็จ...",
+      fullText: ` เซียมซีใบนี้ได้ตอนที่ “พระรามยกศรโมลี” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบประหนึ่งพระรามผู้ยกมหาธนูแห่งพระนารายณ์ได้สำเร็จ หน้าที่การงานของท่านในระยะนี้จะนำพาโชคลาภและความสำเร็จมาสู่ แม้งานที่ได้รับดูหนักหน่วงและท้าทายดุจศรศักดิ์สิทธิ์อันไม่มีผู้ใดยกได้ แต่ด้วยความสามารถ ความเพียรพยายามและความมั่นใจในตนเอง ท่านจะผ่านพ้นอุปสรรคและประสบผลสำเร็จโดยง่าย ความสำเร็จครั้งนี้จะก่อให้เกิดลาภผลและทรัพย์สินเงินทอง อันเป็นผลแห่งความตั้งใจแน่วแน่ จงใช้สติปัญญาและความสามารถให้ครบถ้วน อย่าประมาท และเมื่อได้ลาภผลแล้วควรรู้จักเก็บออม มิให้ใช้จ่ายฟุ่มเฟือย เพื่อให้ความเจริญรุ่งเรืองยั่งยืนมั่นคงสืบไป      `
+    },
+    18: {
+      title: "รามเกียรติ์ร้อยแก้วประกอบคำกลอน, 2561 : 422",
+      img: "images/r18.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พระสุริย์วงศ์แบ่งทัพ” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังพระสุริย์วงศ์ผู้จัดทัพให้วานรและอสุราประจำที่อย่างเป็นระเบียบ ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พระสุริย์วงศ์แบ่งทัพ” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังพระสุริย์วงศ์ผู้จัดทัพให้วานรและอสุราประจำที่อย่างเป็นระเบียบ ท่านมีมิตรสหายคอยเกื้อหนุนอยู่เคียงข้าง อีกทั้งยังมีผู้ใหญ่คอยชี้นำแนะแนว แม้ชีวิตและการงานจะเต็มไปด้วยอุปสรรค แต่ท่านจะไม่ต้องเผชิญเพียงลำพัง หากรู้จักรักษาน้ำใจเพื่อน และรับฟังคำตักเตือนด้วยความเคารพ ปัญหาที่ดูหนักก็จะคลี่คลายไปได้อย่างมั่นคง หนทางชีวิตของท่านจะดำเนินไปอย่างราบรื่น พร้อมทั้งก่อให้เกิดความสัมพันธ์ที่ดีมั่นคง ทั้งในมิตรภาพ การทำงาน และครอบครัว ซึ่งจะเป็นพลังหนุนเสริมให้ก้าวไกลและยั่งยืน`
+    },
+    19: {
+      title: "บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 70",
+      img: "images/r19.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พิเภกไปอยู่กับพระราม” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์กลาง เปรียบดังพิเภกผู้ยืนหยัดในความซื่อสัตย์...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พิเภกไปอยู่กับพระราม” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์กลาง เปรียบดังพิเภกผู้ยืนหยัดในความซื่อสัตย์ แม้ต้องพลัดจากวงศ์ตระกูลก็ยังเลือกข้างความถูกต้อง ท่านอาจเผชิญอุปสรรคหรือความเข้าใจผิดในหน้าที่การงาน แต่หากตั้งมั่นในความดีงามและไม่คิดกลับกลอก ความซื่อสัตย์ของท่านจะเป็นเกราะป้องกันและนำไปสู่ผลลัพธ์ที่ดีกว่า ผู้คนที่มองเห็นคุณค่าและความจริงใจของท่านจะยื่นมือเข้ามาช่วยเหลือ เพียงยึดมั่นในความซื่อสัตย์ ไม่คิดเอาเปรียบหรือทรยศผู้อื่น ความตั้งใจมั่นนี้จะนำพามาซึ่งความมั่นคง เกียรติยศ และความเคารพนับถือในชีวิตและการงานของท่าน`
+    },
+    20: {
+      title: "บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 522",
+      img: "images/r20.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางสีดาลุยไฟ” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังนางสีดาผู้ก้าวผ่านเปลวเพลิงเพื่อพิสูจน์ความบริสุทธิ์แห่งรัก ความรักของท่านอาจถูกทดสอบด้วยอุปสรรค ความเข้าใจผิด ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางสีดาลุยไฟ” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังนางสีดาผู้ก้าวผ่านเปลวเพลิงเพื่อพิสูจน์ความบริสุทธิ์แห่งรัก ความรักของท่านอาจถูกทดสอบด้วยอุปสรรค ความเข้าใจผิด หรือความเคลือบแคลงใจ แต่หากยึดมั่นในความจริงใจและความซื่อสัตย์ดุจดังนางสีดาที่ไม่หวั่นไหวต่อเปลวเพลิง ความรักนั้นย่อมผ่านพ้นทุกข้อสงสัยไปได้ เมื่อความศรัทธาและความเชื่อใจได้รับการพิสูจน์แล้ว ความรักของท่านจะกลับมาสดใส มั่นคง และงดงามกว่าเดิม เปรียบดังเพลิงที่เผาผลาญความเคลือบแคลง จนเหลือไว้เพียงความผูกพันอันบริสุทธิ์และมั่นคงยืนนาน`
+    },
+    
+    21: {
+      title: "บทละครเรื่องรามเกียรติ์และบ่อเกิดรามเกียรติ์, 2544 : 221",
+      img: "images/r21.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พระรามแผลงศรครุฑราชแก้พระลักษมณ์และไพร่พล” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พระรามแผลงศรครุฑราชแก้พระลักษมณ์และไพร่พล” เกณฑ์ชะตาของผู้เสี่ยงทายอยู่ในเกณฑ์ที่ดี เปรียบดังพระลักษมณ์และเหล่าทัพที่แม้ถูกนาคบาศพันธนาการ ก็ยังได้ฟื้นคืนชีวีด้วยอานุภาพแห่งศรครุฑราช สุขภาพของท่านอาจอยู่ในช่วงอ่อนแอหรือมีอาการเจ็บป่วย จึงจำเป็นต้องใส่ใจและดูแลร่างกายให้มากขึ้น แต่เช่นเดียวกับพิเภกผู้ทูลแจ้งจนพระรามแก้สถานการณ์ได้สำเร็จ ท่านก็จะได้รับความช่วยเหลือจากมิตรสหายหรือผู้รู้ที่คอยให้คำแนะนำ พาไปพบแพทย์ หรืออยู่เคียงข้างเพื่อให้กำลังใจ ด้วยการดูแลรักษาอย่างถูกวิธี และการได้รับความช่วยเหลือทันท่วงที ร่างกายของท่านจะฟื้นตัวกลับมาแข็งแรง สุขภาพจะค่อย ๆ ดีขึ้น และกลับคืนสู่สมดุลดังเดิม`
+    },
+    22: {
+      title: "ขุนช้างขุนแผน, 2544 : 193",
+      img: "images/k22.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “พลายแก้วได้เป็นขุนแผน’’ เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพลายแก้วในตอนที่ได้รับพระราชทานยศให้เป็นขุนแผน ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “พลายแก้วได้เป็นขุนแผน’’ เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับพลายแก้วในตอนที่ได้รับพระราชทานยศให้เป็นขุนแผน เจ้าชะตากำลังอยู่ในช่วงดวงชะตาจะรุ่งเรือง ได้รับการยกย่องและความไว้วางใจจากผู้ใหญ่ให้รับภารกิจสำคัญที่มาพร้อมกับตำแหน่ง อำนาจ และบทบาทใหม่ซึ่งแม้อาจเต็มไปด้วยความรับผิดชอบที่หนักหนาในช่วงเริ่มต้นแต่ขอให้มั่นใจว่านั่นคือบันไดขั้นสำคัญที่จะนำพาไปสู่ความสำเร็จและความมั่นคงในภายภาคหน้าจงตั้งมั่นในความดี ซื่อสัตย์ต่อหน้าที่ ไม่ย่อท้อต่ออุปสรรค แล้วความเจริญรุ่งเรืองโอกาสดี ๆ และความสำเร็จจะหลั่งไหลเข้ามาอย่างต่อเนื่องไม่ขาดสาย`
+    },
+    23: {
+      title: "ขุนช้างขุนแผน, 2544 : 55",
+      img: "images/k23.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางศรีมาลาฝัน” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ นางศรีมาลาฝันว่าได้เด็ดดอกบัวมาครอบครอง ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางศรีมาลาฝัน” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ นางศรีมาลาฝันว่าได้เด็ดดอกบัวมาครอบครอง เป็นนิมิตหมายถึงความรักแท้ และโอกาสดี ๆ ที่กำลังจะเข้ามาไม่เพียงเรื่องหัวใจ หากยังรวมถึงความสำเร็จในหน้าที่หรือการได้รับโอกาสจากผู้ใหญ่ที่มองเห็นศักยภาพจงเปิดใจ รับสิ่งดี ๆ ที่กำลังจะปรากฏ อย่ากลัวที่จะแสดงความสามารถและจงกล้าคว้าโอกาสนั้นไว้ เพราะเบื้องหน้าคือเส้นทางแห่งความรัก ความสำเร็จ และความสุขอย่างแท้จริง
+`
+    },
+    24: {
+      title: "ขุนช้างขุนแผน, 2544 : 193",
+      img: "images/k24.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางทองประศรีเข้ามาอยู่กรุง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ พระพันวษาช่วงที่พลังดีมีชัยอยู่ในช่วงเวลาอันเป็นมงคล เป็นจังหวะที่เหมาะสมสำหรับการเริ่มต้น หรือเดินหน้าต่อในสิ่งที่ตั้งใจไว้ ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางทองประศรีเข้ามาอยู่กรุง” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ พระพันวษาช่วงที่พลังดีมีชัยอยู่ในช่วงเวลาอันเป็นมงคล เป็นจังหวะที่เหมาะสมสำหรับการเริ่มต้น หรือเดินหน้าต่อในสิ่งที่ตั้งใจไว้ ขอเพียงเปิดใจรับฟังคำแนะนำจากผู้มีประสบการณ์ และดำเนินการอย่างเป็นลำดับขั้นตอน ความสำเร็จก็จะอยู่ไม่ไกลเกินเอื้อม หากมีเรื่องต้องตัดสินใจในเวลานี้ให้เลือกในทางที่ทำให้ใจสงบและสบายใจที่สุดเพราะไม่ว่าทางใด ก็ล้วนเป็นเส้นทางที่จะพาไปสู่ความสำเร็จได้ทั้งสิ้นแม้ฤกษ์งามยามดีจะอยู่ตรงหน้าแต่ผลลัพธ์จะงดงามได้ ต้องอาศัยความพยายามและความตั้งใจจริงเป็นเครื่องนำทาง`
+    },
+    25: {
+      title: "ขุนช้างขุนแผน, 2544 : 404",
+      img: "images/k25.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “สมเด็จพระพันวษาทรงให้ชำระความ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับขุนช้างผู้ยังผูกพันแน่นแฟ้นกับความรักที่ล่วงเลย แม้วันเวลาจะผ่านไปนานเพียงใดใจยังคงโศกถึง วันทอง...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “สมเด็จพระพันวษาทรงให้ชำระความ” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับขุนช้างผู้ยังผูกพันแน่นแฟ้นกับความรักที่ล่วงเลย แม้วันเวลาจะผ่านไปนานเพียงใดใจยังคงโศกถึง วันทอง ผู้เป็นดั่งแสงสว่างในชีวิตความรักที่เคยมีอาจงดงามและมีคุณค่ายิ่ง แต่จงระวังอย่าให้ความโศกเศร้ากลายเป็นพันธนาการที่ฉุดรั้งไม่ให้หัวใจก้าวไปข้างหน้า ขณะนี้อาจเป็นช่วงเวลาที่เปลี่ยวเหงา ขาดที่พึ่งพิงทางใจหรือสิ่งที่เคยยึดเหนี่ยว ทำให้คุณรู้สึกว่างเปล่าและไร้แรงผลักดัน ทว่าในความเจ็บปวดนั้น ยังมีบทเรียนที่งดงามซ่อนอยู่ จงรักตัวเองให้มากพอ ก่อนจะเปิดใจให้ใครอีกครั้งอย่าปล่อยให้หัวใจจมอยู่กับอดีตหรือผู้ที่เดินจากไปแล้วหากช่วงนี้รู้สึกอ้างว้าง ให้ใช้เวลาอยู่กับตัวเอง ทำในสิ่งที่รักเติมเต็มตัวตนจากภายใน แล้ววันหนึ่งแสงสว่างดวงใหม่จะปรากฏขึ้นเอง`
+    },
+    26: {
+      title: "ขุนช้างขุนแผน, 2544 : 189",
+      img: "images/k26.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “ขุนช้างวิวาทกับพระไวย” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับขุนช้างผู้มีบุญคุณต่อพลายงาม เลี้ยงดูทะนุถนอมมาตั้งแต่เยาว์วัย ดุจดั่งสายเลือดของตนเอง หากแต่เมื่อวันเวลาผ่านไป ...",
+      fullText: ``
+    },
+    27: {
+      title: "ขุนช้างขุนแผน, 2544 : 379",
+      img: "images/k27.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “กำเนิดพลายยงลูกนางสร้อยฟ้า” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ พลายยงผู้มีวาสนาและบริวารคอยสนับสนุนทรัพย์สินและความสุขไหลมาอย่างไม่ขาดสาย ชีวิตเต็มไปด้วยความรื่นรมย์และสมบูรณ์ในทุกย่างก้าว ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “กำเนิดพลายยงลูกนางสร้อยฟ้า” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ดี เปรียบได้ดังกับ พลายยงผู้มีวาสนาและบริวารคอยสนับสนุนทรัพย์สินและความสุขไหลมาอย่างไม่ขาดสาย ชีวิตเต็มไปด้วยความรื่นรมย์และสมบูรณ์ในทุกย่างก้าว แม้โชคชะตาจะนำพาความสุขสบายมาให้ อย่าประมาทในความเพียรพยายามและความอดทน เพราะนั่นคือกุญแจสำคัญที่จะทำให้ความสำเร็จมั่นคงและยั่งยืน ท่านจะได้รับตำแหน่ง หน้าที่การงาน ชื่อเสียง และการยอมรับจากผู้คนรอบข้าง มีบริวารและผู้สนับสนุนคอยช่วยเหลือ จนชีวิตเปี่ยมด้วยความสะดวกสบายและความสุขในทุกวัน การเคารพและเปิดรับคำแนะนำจากผู้มีประสบการณ์ คือหนทางสู่ปัญญาและความก้าวหน้า เพราะผู้ที่ผ่านร้อนผ่านหนาวมาก่อน จะนำพาโอกาสดี ๆ มาสู่ท่านในเวลาอันเหมาะสม`
+    },
+
+    28: {
+      title: "ขุนช้างขุนแผน, 2544 : 192",
+      img: "images/k28.png",
+      desc: "เซียมซีใบนี้ได้ตอนที่ “นางพิมเปลี่ยนชื่อวันทอง ขุนช้างลวงว่าพลายแก้วตาย” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับ นางวันทองผู้เผชิญเคราะห์โรคภัยและความอ่อนแรงทางกายและใจแม้ร่างกายและจิตใจอ่อนล้า ...",
+      fullText: `เซียมซีใบนี้ได้ตอนที่ “นางพิมเปลี่ยนชื่อวันทอง ขุนช้างลวงว่าพลายแก้วตาย” เกณฑ์ชะตาของผู้เสี่ยงทายกำลังอยู่ในเกณฑ์ไม่ดีนัก เปรียบได้ดังกับ นางวันทองผู้เผชิญเคราะห์โรคภัยและความอ่อนแรงทางกายและใจแม้ร่างกายและจิตใจอ่อนล้า แต่ยังคงรับรู้ถึงความห่วงใยและความรักจากคนรอบข้างเสมอ ช่วงเวลานี้เหมือนมีภาระหนักอึ้งอยู่ในใจ แม้พยายามเต็มที่ก็ยังไม่พบหนทางที่ชัดเจน หากเผชิญกับปัญหาด้านสุขภาพ จงอย่าลังเลที่จะขอคำปรึกษาจากผู้รู้ เพื่อสร้างความสบายใจแก่ตนเองและผู้ที่รัก อย่าปิดกั้นตัวเองจากความช่วยเหลือ และเปิดใจแบ่งปันความทุกข์กับคนรอบข้าง เพราะการร่วมแรงร่วมใจกันจะช่วยคลี่คลายปัญหาและพาไปสู่ทางออกที่ดีขึ้น`
+    },
+    
 };
 
-const RAM  = new Set([1,2,3,4,5,6,7,15,16,17,18,19,20,21]);
-const KCKP = new Set([8,9,10,11,12,13,14,22,23,24,25,26,27,28]);
+const fortune = fortunes[stickNum] || fortunes[1];
 
-function getVerseSummary(t, maxLines=3){
-  const L=t.split('\n'); return L.slice(0,maxLines).join('\n')+(L.length>maxLines?' …':'');
+// เติมหัวข้อ/รูป
+document.getElementById('fortuneTitle').textContent = fortune.title;
+document.getElementById('fortuneImage').src = fortune.img;
+
+// **เติม desc + ลิงก์อ่านต่อ**
+const descEl = document.getElementById('fortuneDesc');
+descEl.innerHTML = `${fortune.desc} <button id="readMore" class="link-more">อ่านต่อ</button>`;
+
+
+
+// ---------- Text Modal -------
+const textModal = document.getElementById('textModal');
+const popupTitle = document.getElementById('popupTitle');
+const popupText  = document.getElementById('popupText');
+
+function openTextModal() {
+  popupTitle.textContent = fortune.title;
+  popupText.textContent  = fortune.fullText;
+  textModal.style.display = 'flex';
+  document.body.classList.add('modal-open');
 }
-function fitTextToBox(el, box, minSize=12, maxSize=30){
-  let size=Math.min(maxSize,Math.max(minSize,Math.floor(box.clientWidth/22)));
-  el.style.fontSize=size+'px';
-  const maxW=box.clientWidth*0.94, maxH=box.clientHeight*0.96;
-  for(let i=0;i<60;i++){ if(el.scrollWidth<=maxW && el.scrollHeight<=maxH) break; size-=.5; if(size<=minSize) break; el.style.fontSize=size+'px';}
-}
-function pickUrl(base){
-  const a=`./${base}`, b=`./images/${base}`;
-  const img=new Image();
-  return new Promise(r=>{ img.onload=()=>r(a); img.onerror=()=>r(b); img.src=a; });
-}
-async function applyThemeById(id){
-  const left = document.getElementById('bgLeft');
-  const right= document.getElementById('bgRight');
-  let leftName,rightName;
-  if(RAM.has(id)){ document.body.classList.add('theme-ram'); leftName='iconram03.png'; rightName='iconram02.png'; }
-  else{ document.body.classList.add('theme-kckp'); leftName='k01.png'; rightName='k02.png'; }
-  left.src = await pickUrl(leftName);
-  right.src= await pickUrl(rightName);
-}
-
-/* ===== Render ===== */
-function render(){
-  let id = Number(sessionStorage.getItem('siemsiStick')) || 13;
-  sessionStorage.setItem('siemsiStick', String(id));
-  const item = DATA[id] || Object.values(DATA)[0];
-
-  applyThemeById(id);
-  document.getElementById('title').textContent = `คำทำนาย — ใบที่ ${id}`;
-  document.getElementById('drawBadge').textContent = `ใบที่ ${id}`;
-  document.getElementById('seriesBadge').textContent = item.series;
-
-  const box=document.getElementById('verseBox'), verseEl=document.getElementById('verse');
-  verseEl.textContent = getVerseSummary(item.verse);
-  fitTextToBox(verseEl, box);
-
-  document.getElementById('meaning').textContent = item.meaning;
-  document.getElementById('note').textContent    = item.note;
+function closeTextModal() {
+  textModal.style.display = 'none';
+  document.body.classList.remove('modal-open');
 }
 
-function openVerseModal(){
-  const id = Number(sessionStorage.getItem('siemsiStick')) || 13;
-  const item = DATA[id] || Object.values(DATA)[0];
+// เปิดจากลิงก์ "อ่านต่อ" ใต้คำอธิบาย
+document.getElementById('readMore').addEventListener('click', openTextModal);
+// เปิดจากเมนู
+document.getElementById('viewFullTextBtn').addEventListener('click', openTextModal);
+// ปิด modal
+document.getElementById('closeText').addEventListener('click', closeTextModal);
+textModal.addEventListener('click', (e)=>{ if(e.target===textModal) closeTextModal(); });
 
-  // ใส่กลอน
-  document.getElementById('fullVerse').textContent = item.verse;
+// ---------- Image Modal (zoom + pan + pinch) ----------
+const imageModal = document.getElementById('imageModal');
+const popupImage = document.getElementById('popupImage');
+const zoomControl = document.getElementById('zoomControl');
 
-  // ใส่ความหมายล่วงหน้า (แต่ยังไม่โชว์)
-  document.getElementById('fullMeaning').textContent = item.meaning;
+document.getElementById('viewImageBtn').onclick = openImage;
+document.getElementById('fortuneImage').onclick  = openImage;
 
-  // เปิด modal กลอน
-  const verseModal = document.getElementById('verseModal');
-  verseModal.classList.remove('hidden');
-  verseModal.classList.add('flex');
-
-  // ปุ่มไปดูความหมาย
-  document.getElementById('toMeaningBtn').onclick = function(){
-    verseModal.classList.add('hidden');
-    verseModal.classList.remove('flex');
-    openMeaningModal();
+function openImage(){
+  popupImage.src = fortune.img;
+  imageModal.style.display='flex';
+  document.body.classList.add('modal-open');
+  resetZoom();
+}
+imageModal.addEventListener('click', e=>{
+  if(e.target===imageModal){
+    imageModal.style.display='none';
+    document.body.classList.remove('modal-open');
   }
-}
-
-function closeVerseModal(){
-  const m = document.getElementById('verseModal');
-  m.classList.add('hidden');
-  m.classList.remove('flex');
-}
-
-function openMeaningModal(){
-  const m = document.getElementById('meaningModal');
-  m.classList.remove('hidden');
-  m.classList.add('flex');
-}
-
-function closeMeaningModal(){
-  const m = document.getElementById('meaningModal');
-  m.classList.add('hidden');
-  m.classList.remove('flex');
-}
-
-function backToVerse(){
-  closeMeaningModal();
-  openVerseModal();
-}
-
-
-/* ปุ่มไปหน้า form.html */
-document.getElementById('nextBtn').addEventListener('click', ()=>{ window.location.href='form.html'; });
-
-
-
-
-
-/* =========================
-   COUNTER (CountAPI + Fallback)
-   ========================= */
-async function initCounterWithCountAPI(){
-  const el = document.getElementById('visitCounter');
-  el.textContent = 'กำลังโหลดตัวนับ…';
-
-  // ตั้ง namespace จากโฮสต์เว็บเพื่อลดการชนกับโปรเจกต์อื่น
-  const NAMESPACE = (location.host || 'local').replace(/\W/g,'_') || 'local_namespace';
-  // แก้ชื่อตามต้องการ เช่น 'siemsi_total' หรือแบ่งหน้าด้วย path
-  const KEY = 'siemsi_total';
-
-  // helper: timeout ป้องกันรอเน็ตค้าง
-  const withTimeout = (promise, ms=5000) => {
-    const ctl = new AbortController();
-    const id = setTimeout(()=>ctl.abort(), ms);
-    return promise.finally(()=>clearTimeout(id));
-  };
-
-  try {
-    // 1) สร้าง key ถ้ายังไม่มี (value เริ่มที่ 0) — ถ้ามีอยู่แล้ว API จะคืน error ก็ไม่เป็นไร
-    await withTimeout(
-      fetch(`https://api.countapi.xyz/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`)
-        .catch(()=>{}) // เงียบ error ได้
-    );
-
-    // 2) นับ +1
-    const resp = await withTimeout(
-      fetch(`https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`)
-    );
-    const data = await resp.json();
-    if (typeof data.value === 'number') {
-      el.textContent = `จำนวนผู้ใช้ในระบบ ${data.value.toLocaleString('th-TH')} ครั้ง`;
-      return;
-    }
-    throw new Error('bad response');
-  } catch (err) {
-    // ===== โหมดสำรอง (ออฟไลน์/บริการล่ม) =====
-    const k="siemsi_visit_count_fallback";
-    const n=(Number(localStorage.getItem(k))||0)+1;
-    localStorage.setItem(k,String(n));
-    el.textContent = `จำนวนผู้ใช้ในระบบ ${n.toLocaleString('th-TH')} ครั้ง (โหมดสำรอง)`;
-  }
-}
-
-/* start */
-render();
-initCounterWithCountAPI();
-
-addEventListener('resize', ()=>{
-  const box=document.getElementById('verseBox');
-  const verseEl=document.getElementById('verse');
-  verseEl.style.fontSize=''; fitTextToBox(verseEl,box);
 });
+
+let scale=1, originX=0, originY=0, startX=0, startY=0, isDrag=false, lastDist=0;
+
+function applyTransform(){ popupImage.style.transform=`translate(${originX}px,${originY}px) scale(${scale})`; }
+function resetZoom(){ scale=1; originX=originY=0; applyTransform(); zoomControl.textContent='🔍'; }
+
+zoomControl.onclick=()=>{ if(scale===1){scale=2;zoomControl.textContent='➖';}else{resetZoom();} applyTransform(); };
+
+popupImage.addEventListener('mousedown',e=>{ if(scale===1)return; isDrag=true; startX=e.clientX-originX; startY=e.clientY-originY; });
+window.addEventListener('mousemove',e=>{ if(!isDrag)return; originX=e.clientX-startX; originY=e.clientY-startY; applyTransform(); });
+window.addEventListener('mouseup',()=>isDrag=false);
+
+imageModal.addEventListener('touchstart',e=>{
+  if(e.touches.length===1 && scale>1){ isDrag=true; startX=e.touches[0].clientX-originX; startY=e.touches[0].clientY-originY; }
+});
+imageModal.addEventListener('touchmove',e=>{
+  if(e.touches.length===2){
+    e.preventDefault();
+    const d=Math.hypot(
+      e.touches[0].clientX-e.touches[1].clientX,
+      e.touches[0].clientY-e.touches[1].clientY
+    );
+    if(lastDist){
+      const delta=(d-lastDist)/200;
+      scale=Math.min(Math.max(scale+delta,1),4);
+      applyTransform();
+    }
+    lastDist=d;
+  }else if(isDrag && e.touches.length===1){
+    originX=e.touches[0].clientX-startX;
+    originY=e.touches[0].clientY-startY;
+    applyTransform();
+  }
+});
+imageModal.addEventListener('touchend',()=>{ isDrag=false; lastDist=0; });
+
+// ---------- การ์ตูนหนุมาน + กล่องคำพูด ----------
+
+// ---------- การ์ตูนหนุมาน + กล่องคำพูด ----------
+const katoonWrapper = document.getElementById('katoonWrapper');
+const katoonOverlay = document.getElementById('katoonOverlay');
+const katoonImg = document.getElementById('katoonImg');
+const speechBubble = document.getElementById('speechBubble');
+const mainMenuBtn = document.getElementById('mainMenuBtn');
+const dropdownMenu = document.getElementById('dropdownMenu');
+
+// เปิด/ปิดเมนู
+mainMenuBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isHidden = dropdownMenu.classList.contains('hidden');
+
+  if (isHidden) {
+    // เปิดเมนู → แสดงพื้นหลัง + หนุมานบนสุด
+    katoonWrapper.classList.add('show');
+    katoonOverlay.classList.remove('hidden');
+    dropdownMenu.classList.remove('hidden');
+    katoonImg.classList.add('animate-float');
+    setTimeout(() => speechBubble.classList.add('show'), 300);
+  } else {
+    // ปิดเมนู → ซ่อนทุกอย่าง
+    katoonWrapper.classList.remove('show');
+    dropdownMenu.classList.add('hidden');
+    speechBubble.classList.remove('show');
+    katoonImg.classList.remove('animate-float');
+    setTimeout(() => katoonOverlay.classList.add('hidden'), 400);
+  }
+});
+
+// ปิดเมนูเมื่อคลิกนอก
+document.addEventListener('click', (e) => {
+  if (!mainMenuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+    katoonWrapper.classList.remove('show');
+    dropdownMenu.classList.add('hidden');
+    speechBubble.classList.remove('show');
+    katoonImg.classList.remove('animate-float');
+    setTimeout(() => katoonOverlay.classList.add('hidden'), 400);
+  }
+});
+
+// เมื่อกด “ดูภาพกลอน” → ปิดเงาและหนุมานก่อนเปิดภาพ
+document.getElementById('viewImageBtn').addEventListener('click', () => {
+  katoonWrapper.classList.remove('show');
+  dropdownMenu.classList.add('hidden');
+  speechBubble.classList.remove('show');
+  katoonImg.classList.remove('animate-float');
+  katoonOverlay.classList.add('hidden');
+  openImage();
+});
+
+
+
+
+
+
 </script>
 </body>
 </html>
